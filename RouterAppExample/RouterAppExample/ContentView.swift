@@ -29,15 +29,11 @@ struct ContentView: View {
                 SimpleViewsExample()
             }
         }
-        .onAppear {
-            UIViewController.swizzlePresent()
-        }
     }
 }
 
 enum ExampleRouteItem: String, Routable {
     var id: String { rawValue }
-
     case simpleViews
 }
 

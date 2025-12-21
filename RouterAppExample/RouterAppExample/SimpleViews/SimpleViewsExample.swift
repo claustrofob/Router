@@ -72,9 +72,9 @@ struct SimpleViewsExample: View {
                     .font(.subheadline)
 
                 Button(action: {
-                    router.show(ConfirmationRoute())
+                    router.dismiss()
                 }) {
-                    Text("Ok, go back to the city route")
+                    Text("Ok, go back")
                 }
             }
             .navigationTitle(route.city.rawValue)
