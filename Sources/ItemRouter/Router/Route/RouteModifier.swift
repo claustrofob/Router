@@ -1,0 +1,85 @@
+import SwiftUI
+
+@MainActor
+private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifier {
+    private let type: Route.Type
+    private let router: Router
+    private let presentationType: RoutePresentationType
+    @ViewBuilder private let routeContent: (Route) -> NewRouteContent
+    
+    private var typedItemBinding: Binding<Route?> {
+        var storedItem: Route?
+        return Binding(get: {
+            if let item = router.item(as: type) {
+                storedItem = item
+                return item
+            } else {
+                return nil
+            }
+        }, set: { _ in
+            if let item = router.item(as: type), item == storedItem {
+                router.dismiss()
+            }
+        })
+    }
+    
+    private var closeAction: CloseAction {
+        CloseAction {
+            router.dismiss()
+        }
+    }
+    
+    init(
+        type: Route.Type,
+        in router: Router,
+        presentationType: RoutePresentationType,
+        @ViewBuilder content: @escaping (Route) -> NewRouteContent
+    ) {
+        self.type = type
+        self.router = router
+        self.presentationType = presentationType
+        routeContent = content
+    }
+    
+    func body(content: Content) -> some View {
+        switch presentationType {
+        case .navigationStack:
+            content.navigationDestination(item: typedItemBinding) { route in
+                routeContent(route).id(route.id)
+                    .environment(\.close, closeAction)
+            }
+        case .sheet:
+            content.sheet(item: typedItemBinding) { route in
+                routeContent(route).id(route.id)
+                    .environment(\.close, closeAction)
+            }
+        case .fullScreen:
+            content.fullScreenCover(item: typedItemBinding) { route in
+                routeContent(route).id(route.id)
+                    .environment(\.close, closeAction)
+            }
+        case let .custom(transitionDelegateFactory):
+            content.customPresentation(item: typedItemBinding, transitionDelegateFactory: transitionDelegateFactory) { route in
+                routeContent(route).id(route.id)
+                    .environment(\.close, closeAction)
+            }
+        }
+    }
+}
+
+@MainActor
+public extension View {
+    func route<Route: Routable, NewContent: View>(
+        _ type: Route.Type,
+        in router: Router,
+        presentationType: RoutePresentationType,
+        @ViewBuilder content: @escaping (Route) -> NewContent
+    ) -> some View {
+        modifier(RouteModifier(
+            type: type,
+            in: router,
+            presentationType: presentationType,
+            content: content
+        ))
+    }
+}
