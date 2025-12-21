@@ -9,7 +9,7 @@ import SwiftUI
 import Router
 
 struct SimpleViewsExample: View {
-    let router = Router()
+    @State var router = Router()
 
     var body: some View {
         ZStack {
