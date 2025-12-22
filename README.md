@@ -1,0 +1,415 @@
+# Router
+
+A type-safe, lightweight, and elegant navigation routing solution for SwiftUI applications.
+
+[![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org)
+[![Platform](https://img.shields.io/badge/Platform-iOS%2017+-lightgrey.svg)](https://developer.apple.com)
+[![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+## Overview
+
+Router simplifies navigation in SwiftUI by providing a centralized, type-safe routing system that eliminates boilerplate code and makes navigation logic clear and maintainable. Instead of managing multiple `@State` bindings and navigation presentation logic throughout your views, Router provides a single source of truth for all navigation events.
+
+## The Problem
+
+Traditional SwiftUI navigation often leads to:
+
+- **Scattered State Management**: Navigation state spread across multiple `@State` properties
+- **Complex Binding Logic**: Manually managing presentation bindings for sheets, alerts, and navigation destinations
+- **Type Safety Issues**: String-based or loosely-typed routing prone to runtime errors
+- **Boilerplate Code**: Repetitive presentation logic duplicated across views
+- **Sequential Presentation Bugs**: Issues when presenting multiple alerts or sheets in sequence
+
+## Features
+
+✨ **Type-Safe Routing** - Define routes as strongly-typed enums or structs conforming to `Routable`
+
+🎯 **Single Source of Truth** - One `Router` instance manages all navigation state
+
+🔄 **Multiple Presentation Types** - Support for:
+- NavigationStack destinations
+- Tabs
+- Sheets
+- Full-screen covers
+- Alerts
+- Confirmation dialogs
+- Custom presentations
+
+## Installation
+
+### Swift Package Manager
+
+Add Router to your project using Xcode:
+
+1. File > Add Package Dependencies
+2. Enter the package URL: `https://github.com/claustrofob/Router.git`
+3. Select your version requirements
+
+Or add it to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/claustrofob/Router.git", from: "1.0.0")
+]
+```
+
+## Quick Start
+
+### 1. Define Your Routes
+
+Create routes as enums or structs conforming to `Routable`:
+
+```swift
+import Router
+
+enum AppRoute: String, Routable {
+    var id: String { rawValue }
+    
+    case profile
+    case settings
+    case about
+}
+```
+
+### 2. Create a Router
+
+Initialize a `Router` instance in your view:
+
+```swift
+import SwiftUI
+import Router
+
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        // Your view content
+    }
+}
+```
+
+### 3. Attach Route Handlers
+
+Use the `.route()` modifier to handle navigation:
+
+```swift
+var body: some View {
+    NavigationStack {
+        Button("Go to Profile") {
+            router.show(.profile)
+        }
+    }
+    .route(AppRoute.self, in: router, presentationType: .navigationStack) { route in
+        switch route {
+        case .profile:
+            ProfileView()
+        case .settings:
+            SettingsView()
+        case .about:
+            AboutView()
+        }
+    }
+}
+```
+
+## Usage Examples
+
+### Navigation Stack
+
+Navigate between views in a navigation hierarchy:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Button("View Details") {
+                    router.show(DetailRoute(id: "123"))
+                }
+            }
+            .navigationTitle("Home")
+        }
+        .route(DetailRoute.self, in: router, presentationType: .navigationStack) { route in
+            DetailView(id: route.id)
+        }
+    }
+}
+
+struct DetailRoute: Routable {
+    var id: String
+}
+```
+
+### Sheet Presentation
+
+Present content as a sheet:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        Button("Show Settings") {
+            router.show(SettingsRoute())
+        }
+        .route(SettingsRoute.self, in: router, presentationType: .sheet) { _ in
+            SettingsView()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+    }
+}
+
+struct SettingsRoute: Routable {
+    var id: String { "settings" }
+}
+```
+
+### Alerts with Actions
+
+Display alerts with type-safe message handling:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        Button("Show Alert") {
+            router.show(AlertRoute(message: "Are you sure?"))
+        }
+        .alertRoute(
+            AlertRoute.self,
+            in: router,
+            actionsContent: { _ in
+                Button("Confirm", role: .destructive) {
+                    // Handle confirmation
+                    router.dismiss()
+                }
+                Button("Cancel", role: .cancel) {
+                    router.dismiss()
+                }
+            }
+        )
+    }
+}
+
+struct AlertRoute: Routable, MessageAwareProtocol {
+    var id: String { message }
+    let message: String
+}
+```
+
+### Confirmation Dialogs
+
+Show action sheets with multiple options:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        Button("Choose City") {
+            router.show(CitySelectionRoute())
+        }
+        .alertRoute(
+            CitySelectionRoute.self,
+            in: router,
+            presentationType: .confirmation,
+            actionsContent: { _ in
+                ForEach(City.allCases, id: \.self) { city in
+                    Button(city.name) {
+                        selectCity(city)
+                    }
+                }
+            }
+        )
+    }
+}
+
+struct CitySelectionRoute: Routable, MessageAwareProtocol {
+    var id: String { "citySelection" }
+    var message: String { "Choose your destination:" }
+}
+```
+
+### Composition
+
+Compose multiple navigation flows seamlessly:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        NavigationStack {
+            Button("Start Journey") {
+                router.show(CityRoute(city: .paris))
+            }
+        }
+        .route(CityRoute.self, in: router, presentationType: .sheet) { route in
+            CityView(city: route.city)
+        }
+        .route(CityGuideRoute.self, in: router, presentationType: .navigationStack) { route in
+            CityGuideView(city: route.city)
+        }
+        .alertRoute(ConfirmationRoute.self, in: router)
+    }
+}
+```
+
+### Custom Presentations
+
+Use custom UIKit transitions:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        Button("Show Custom") {
+            router.show(CustomRoute())
+        }
+        .route(
+            CustomRoute.self, 
+            in: router, 
+            presentationType: .custom { dismissAction in
+                MyCustomTransitionDelegate(onDismiss: dismissAction)
+            }
+        ) { _ in
+            CustomView()
+        }
+    }
+}
+```
+
+## Advanced Usage
+
+### Protocol Composition
+
+Create rich route types with metadata protocols:
+
+```swift
+struct ErrorRoute: Routable, TitleAwareProtocol, MessageAwareProtocol {
+    var id: String { message }
+    var title: String? { "Error Occurred" }
+    let message: String
+}
+
+// Automatically uses title and message
+view.alertRoute(ErrorRoute.self, in: router)
+```
+
+### Dismissing Routes
+
+```swift
+// From anywhere with access to the router
+router.dismiss()
+
+// Or use the environment value in your destination view
+struct DetailView: View {
+    @Environment(\.close) private var close
+    
+    var body: some View {
+        Button("Close") {
+            close()
+        }
+    }
+}
+```
+
+### Type Checking Current Route
+
+```swift
+if let profileRoute = router.item(as: ProfileRoute.self) {
+    // Currently showing a profile route
+    print("Viewing profile: \(profileRoute.userId)")
+}
+```
+
+## Architecture
+
+Router uses a simple yet powerful architecture:
+
+1. **`Router`**: An `@Observable` class that holds the current route item
+2. **`Routable`**: A protocol requiring `Hashable` and `Identifiable<String>`
+3. **View Modifiers**: SwiftUI extensions that bind router state to presentation APIs
+
+The router automatically handles:
+- State synchronization between multiple presentation types
+- Sequential alert/sheet presentation edge cases
+- Dismissal coordination
+- Type-safe route matching
+
+## Benefits
+
+### Before Router
+
+```swift
+struct ContentView: View {
+    @State private var showProfile = false
+    @State private var showSettings = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    @State private var selectedCity: City?
+    
+    var body: some View {
+        // Complex binding management
+        NavigationStack {
+            // ...
+        }
+        .sheet(isPresented: $showProfile) { ProfileView() }
+        .sheet(isPresented: $showSettings) { SettingsView() }
+        .alert(alertMessage, isPresented: $showAlert) { }
+        .sheet(item: $selectedCity) { city in CityView(city: city) }
+    }
+}
+```
+
+### After Router
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        NavigationStack {
+            // ...
+        }
+        .route(ProfileRoute.self, in: router, presentationType: .sheet) { _ in
+            ProfileView()
+        }
+        .route(SettingsRoute.self, in: router, presentationType: .sheet) { _ in
+            SettingsView()
+        }
+        .alertRoute(AlertRoute.self, in: router)
+        .route(CityRoute.self, in: router, presentationType: .sheet) { route in
+            CityView(city: route.city)
+        }
+    }
+}
+```
+
+## Requirements
+
+- iOS 17.0+
+- Swift 5.9+
+- Xcode 15.0+
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+Router is available under the MIT license. See the LICENSE file for more info.
+
+## Author
+
+Created by Mikalai Zmachynski
+
+## Acknowledgments
+
+Built with modern SwiftUI patterns and the `@Observable` macro for optimal performance and developer experience.
