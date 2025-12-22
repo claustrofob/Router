@@ -41,7 +41,7 @@ struct ContentView: View {
                     ExamplePresentationProvider(dismiss: dismiss)
                 }
             ) { route in
-                Text("Custom presented view")
+                CustomPresentationView()
             }
         }
     }

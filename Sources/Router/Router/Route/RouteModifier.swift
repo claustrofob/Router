@@ -23,12 +23,6 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
         })
     }
     
-    private var closeAction: CloseAction {
-        CloseAction {
-            router.dismiss()
-        }
-    }
-    
     init(
         type: Route.Type,
         in router: Router,
@@ -46,22 +40,18 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
         case .navigationStack:
             content.navigationDestination(item: typedItemBinding) { route in
                 routeContent(route).id(route.id)
-                    .environment(\.close, closeAction)
             }
         case .sheet:
             content.sheet(item: typedItemBinding) { route in
                 routeContent(route).id(route.id)
-                    .environment(\.close, closeAction)
             }
         case .fullScreen:
             content.fullScreenCover(item: typedItemBinding) { route in
                 routeContent(route).id(route.id)
-                    .environment(\.close, closeAction)
             }
         case let .custom(transitionDelegateFactory):
             content.customPresentation(item: typedItemBinding, transitionDelegateFactory: transitionDelegateFactory) { route in
                 routeContent(route).id(route.id)
-                    .environment(\.close, closeAction)
             }
         }
     }

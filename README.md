@@ -369,13 +369,13 @@ view.alertRoute(ErrorRoute.self, in: router)
 // From anywhere with access to the router
 router.dismiss()
 
-// Or use the environment value in your destination view
+// Or use the standart environment value in your destination view
 struct DetailView: View {
-    @Environment(\.close) private var close
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         Button("Close") {
-            close()
+            dismiss()
         }
     }
 }
