@@ -11,7 +11,8 @@ A type-safe, lightweight, and elegant navigation routing solution for SwiftUI ap
 
 ## Overview
 
-Router simplifies navigation in SwiftUI by providing a centralized, type-safe routing system that eliminates boilerplate code and makes navigation logic clear and maintainable. Instead of managing multiple `@State` bindings and navigation presentation logic throughout your views, Router provides a single source of truth for all navigation events.
+Router simplifies navigation in SwiftUI by providing a centralized, type-safe routing system that eliminates boilerplate code and makes navigation logic clear and maintainable. 
+Instead of managing multiple `@State` bindings and navigation presentation logic throughout your views, Router provides a single source of truth for all navigation events.
 
 ## The Problem
 
@@ -22,6 +23,9 @@ Traditional SwiftUI navigation often leads to:
 - **Type Safety Issues**: String-based or loosely-typed routing prone to runtime errors
 - **Boilerplate Code**: Repetitive presentation logic duplicated across views
 - **Sequential Presentation Bugs**: Issues when presenting multiple alerts or sheets in sequence
+
+It's surprising that Apple hasn't addressed these obvious presentation issues with a built-in single source of truth for navigation. 
+Router fills this gap as the missing piece of the SwiftUI ecosystem.
 
 ## Features
 
@@ -336,14 +340,14 @@ struct ContentView: View {
             Button("Start Journey") {
                 router.show(CityRoute(city: .paris))
             }
+            .route(CityRoute.self, in: router, presentationType: .sheet) { route in
+                CityView(city: route.city)
+            }
+            .route(CityGuideRoute.self, in: router, presentationType: .navigationStack) { route in
+                CityGuideView(city: route.city)
+            }
+            .alertRoute(ConfirmationRoute.self, in: router)
         }
-        .route(CityRoute.self, in: router, presentationType: .sheet) { route in
-            CityView(city: route.city)
-        }
-        .route(CityGuideRoute.self, in: router, presentationType: .navigationStack) { route in
-            CityGuideView(city: route.city)
-        }
-        .alertRoute(ConfirmationRoute.self, in: router)
     }
 }
 ```
