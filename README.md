@@ -113,9 +113,8 @@ var body: some View {
 }
 ```
 
-> **Important**: One `Router` instance is designed to manage navigation for **one screen**. 
-Do not pass the same `Router` instance across different screens in your app. Each screen should have its own `Router`. 
-However, you can freely share a `Router` instance among subviews within the same screen using `@Environment` or direct property passing.
+> [!IMPORTANT]
+> One `Router` instance is designed to manage navigation for **one screen**. Do not pass the same `Router` instance across different screens in your app. Each screen should have its own `Router`. However, you can freely share a `Router` instance among subviews within the same screen using `@Environment` or direct property passing.
 
 ## Usage Examples
 
