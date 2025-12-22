@@ -278,7 +278,8 @@ struct ContentView: View {
 
 ### Custom Presentations
 
-Use custom UIKit transitions:
+Router supports custom transitions over UIKit. Just implement `CustomPresentationTransitionDelegateFactory` 
+and use `.custom` presentationType:
 
 ```swift
 struct ContentView: View {
@@ -292,7 +293,7 @@ struct ContentView: View {
             CustomRoute.self, 
             in: router, 
             presentationType: .custom { dismissAction in
-                MyCustomTransitionDelegate(onDismiss: dismissAction)
+                MyCustomPresentationProvider(onDismiss: dismissAction)
             }
         ) { _ in
             CustomView()
@@ -300,6 +301,8 @@ struct ContentView: View {
     }
 }
 ```
+
+A complete example with custom presentation is in the RouterExampleApp.
 
 ## Advanced Usage
 
