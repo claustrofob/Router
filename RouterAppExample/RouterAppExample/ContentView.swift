@@ -19,6 +19,12 @@ struct ContentView: View {
                 }) {
                     Text("Simple views example")
                 }
+
+                Button(action: {
+                    router.show(CustomPresentationRoute())
+                }) {
+                    Text("Custom presentation")
+                }
             }
             .background(.clear)
             .navigationTitle("Router App")
@@ -28,6 +34,15 @@ struct ContentView: View {
             ) { _ in
                 SimpleViewsExample()
             }
+            .route(
+                CustomPresentationRoute.self,
+                in: router,
+                presentationType: .custom { dismiss in
+                    ExamplePresentationProvider(dismiss: dismiss)
+                }
+            ) { route in
+                Text("Custom presented view")
+            }
         }
     }
 }
@@ -35,6 +50,10 @@ struct ContentView: View {
 enum ExampleRouteItem: String, Routable {
     var id: String { rawValue }
     case simpleViews
+}
+
+struct CustomPresentationRoute: Routable {
+    var id: String { "customPresentation" }
 }
 
 #Preview {
