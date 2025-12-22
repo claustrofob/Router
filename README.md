@@ -276,6 +276,7 @@ struct ContentView: View {
     }
 }
 ```
+A complete example with custom presentation is in the RouterAppExample.
 
 ### Composition
 
@@ -301,8 +302,6 @@ struct ContentView: View {
     }
 }
 ```
-
-A complete example with custom presentation is in the RouterExampleApp.
 
 ## Advanced Usage
 
@@ -400,47 +399,6 @@ struct ContentView: View {
 }
 ```
 
-or
-
-```swift
-struct ContentView: View {
-    @State private var router = Router()
-
-    var body: some View {
-        ZStack {
-            Button(action: {
-                // no need to dismiss previous route
-                router.show(SheetRoute.profile)
-            }) {
-                Text("Open profile")
-            }
-        }
-        .route(SheetRoute.self, in: router, presentationType: .sheet) { route in
-            switch route {
-                case .profile: ProfileView()
-                case .settings: SettingsView()
-                case let .city(city): CityView(city: city)
-            }
-        }
-        .alertRoute(AlertRoute.self, in: router)
-    }
-}
-
-enum SheetRoute: Routable {
-    var id: String {
-        switch self {
-        case .profile: return "profile"
-        case .settings: return "settings"
-        case let .city(city): return "city_\(city.rawValue)"
-        }
-    }
-
-    case profile
-    case settings
-    case city(City)
-}
-```
-
 ### After Router
 
 ```swift
@@ -488,6 +446,48 @@ struct ProfileView: View {
     }
 }
 ```
+
+or
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+
+    var body: some View {
+        ZStack {
+            Button(action: {
+                // no need to dismiss previous route
+                router.show(SheetRoute.profile)
+            }) {
+                Text("Open profile")
+            }
+        }
+        .route(SheetRoute.self, in: router, presentationType: .sheet) { route in
+            switch route {
+                case .profile: ProfileView()
+                case .settings: SettingsView()
+                case let .city(city): CityView(city: city)
+            }
+        }
+        .alertRoute(AlertRoute.self, in: router)
+    }
+}
+
+enum SheetRoute: Routable {
+    var id: String {
+        switch self {
+        case .profile: return "profile"
+        case .settings: return "settings"
+        case let .city(city): return "city_\(city.rawValue)"
+        }
+    }
+
+    case profile
+    case settings
+    case city(City)
+}
+```
+
 
 ## Requirements
 
