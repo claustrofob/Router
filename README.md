@@ -251,6 +251,46 @@ enum Country: String, CaseIterable {
 }
 ```
 
+### Tabs
+
+Manage tabs:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+
+    var body: some View {
+        RoutableTabView(router: router) { tab in
+            tab.register(
+                ProfileRoute(),
+                label: { Label("Profile", systemImage: "person.crop.circle") }
+            ) { route in
+                NavigationStack {
+                    ProfileView()
+                }
+            }
+
+            tab.register(
+                SettingsRoute(),
+                label: { Label("Settings", systemImage: "gear") }
+            ) { route in
+                NavigationStack {
+                    SettingsView()
+                }
+            }
+        }
+    }
+}
+
+struct ProfileRoute: Routable {
+    var id: String { "profile" }
+}
+
+struct SettingsRoute: Routable {
+    var id: String { "settings" }
+}
+```
+
 ### Custom Presentations
 
 Router supports custom transitions over UIKit. Just implement `CustomPresentationTransitionDelegateFactory` 
