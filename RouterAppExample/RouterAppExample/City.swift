@@ -1,8 +1,6 @@
 //
-//  City.swift
-//  RouterAppExample
-//
-//  Created by Mikalai Zmachynski on 21/12/2025.
+//  Created by Mikalai Zmachynski.
+//  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
 //
 
 import Foundation
