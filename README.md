@@ -97,17 +97,17 @@ Use the `.route()` modifier to handle navigation:
 var body: some View {
     NavigationStack {
         Button("Go to Profile") {
-            router.show(.profile)
+            router.show(AppRoute.profile)
         }
-    }
-    .route(AppRoute.self, in: router, presentationType: .navigationStack) { route in
-        switch route {
-        case .profile:
-            ProfileView()
-        case .settings:
-            SettingsView()
-        case .about:
-            AboutView()
+        .route(AppRoute.self, in: router, presentationType: .navigationStack) { route in
+            switch route {
+            case .profile:
+                ProfileView()
+            case .settings:
+                SettingsView()
+            case .about:
+                AboutView()
+            }
         }
     }
 }
@@ -122,7 +122,7 @@ Navigate between views in a navigation hierarchy:
 ```swift
 struct ContentView: View {
     @State private var router = Router()
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -131,9 +131,9 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Home")
-        }
-        .route(DetailRoute.self, in: router, presentationType: .navigationStack) { route in
-            DetailView(id: route.id)
+            .route(DetailRoute.self, in: router, presentationType: .navigationStack) { route in
+                DetailView(id: route.id)
+            }
         }
     }
 }
@@ -209,29 +209,45 @@ Show action sheets with multiple options:
 ```swift
 struct ContentView: View {
     @State private var router = Router()
-    
+
     var body: some View {
         Button("Choose City") {
-            router.show(CitySelectionRoute())
+            router.show(CountrySelectionRoute())
         }
         .alertRoute(
-            CitySelectionRoute.self,
+            CountrySelectionRoute.self,
             in: router,
             presentationType: .confirmation,
             actionsContent: { _ in
-                ForEach(City.allCases, id: \.self) { city in
-                    Button(city.name) {
-                        selectCity(city)
+                ForEach(Country.allCases, id: \.self) { country in
+                    Button(country.rawValue) {
+                        router.show(AlertRoute(message: "You chose \(country.rawValue)"))
                     }
                 }
             }
         )
+        .alertRoute(
+            AlertRoute.self,
+            in: router
+        )
     }
 }
 
-struct CitySelectionRoute: Routable, MessageAwareProtocol {
-    var id: String { "citySelection" }
+struct CountrySelectionRoute: Routable, MessageAwareProtocol {
+    var id: String { "countrySelection" }
     var message: String { "Choose your destination:" }
+}
+
+struct AlertRoute: Routable, MessageAwareProtocol {
+    var id: String { message }
+    let message: String
+}
+
+enum Country: String, CaseIterable {
+    case poland = "Poland"
+    case germany = "Germany"
+    case france = "France"
+    case italy = "Italy"
 }
 ```
 
