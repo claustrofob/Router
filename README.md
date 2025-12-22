@@ -7,6 +7,8 @@ A type-safe, lightweight, and elegant navigation routing solution for SwiftUI ap
 [![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+<img width="803" height="210" alt="router-logo" src="https://github.com/user-attachments/assets/f0e07c50-e957-4b72-b79c-2dee560d5826" />
+
 ## Overview
 
 Router simplifies navigation in SwiftUI by providing a centralized, type-safe routing system that eliminates boilerplate code and makes navigation logic clear and maintainable. Instead of managing multiple `@State` bindings and navigation presentation logic throughout your views, Router provides a single source of truth for all navigation events.
