@@ -251,31 +251,6 @@ enum Country: String, CaseIterable {
 }
 ```
 
-### Composition
-
-Compose multiple navigation flows seamlessly:
-
-```swift
-struct ContentView: View {
-    @State private var router = Router()
-    
-    var body: some View {
-        NavigationStack {
-            Button("Start Journey") {
-                router.show(CityRoute(city: .paris))
-            }
-        }
-        .route(CityRoute.self, in: router, presentationType: .sheet) { route in
-            CityView(city: route.city)
-        }
-        .route(CityGuideRoute.self, in: router, presentationType: .navigationStack) { route in
-            CityGuideView(city: route.city)
-        }
-        .alertRoute(ConfirmationRoute.self, in: router)
-    }
-}
-```
-
 ### Custom Presentations
 
 Router supports custom transitions over UIKit. Just implement `CustomPresentationTransitionDelegateFactory` 
@@ -298,6 +273,31 @@ struct ContentView: View {
         ) { _ in
             CustomView()
         }
+    }
+}
+```
+
+### Composition
+
+Compose multiple navigation flows seamlessly:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    
+    var body: some View {
+        NavigationStack {
+            Button("Start Journey") {
+                router.show(CityRoute(city: .paris))
+            }
+        }
+        .route(CityRoute.self, in: router, presentationType: .sheet) { route in
+            CityView(city: route.city)
+        }
+        .route(CityGuideRoute.self, in: router, presentationType: .navigationStack) { route in
+            CityGuideView(city: route.city)
+        }
+        .alertRoute(ConfirmationRoute.self, in: router)
     }
 }
 ```
@@ -373,17 +373,71 @@ struct ContentView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var selectedCity: City?
-    
+
     var body: some View {
         // Complex binding management
-        NavigationStack {
-            // ...
+        ZStack {
+            Button(action: {
+                showSettings = false
+                showAlert = false
+                selectedCity = nil
+                showProfile = true
+            }) {
+                Text("Open profile")
+            }
         }
-        .sheet(isPresented: $showProfile) { ProfileView() }
-        .sheet(isPresented: $showSettings) { SettingsView() }
+        .sheet(isPresented: $showProfile) {
+            ProfileView()
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+        }
         .alert(alertMessage, isPresented: $showAlert) { }
-        .sheet(item: $selectedCity) { city in CityView(city: city) }
+        .sheet(item: $selectedCity) { city in
+            CityView(city: city)
+        }
     }
+}
+```
+
+or
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+
+    var body: some View {
+        ZStack {
+            Button(action: {
+                // no need to dismiss previous route
+                router.show(SheetRoute.profile)
+            }) {
+                Text("Open profile")
+            }
+        }
+        .route(SheetRoute.self, in: router, presentationType: .sheet) { route in
+            switch route {
+                case .profile: ProfileView()
+                case .settings: SettingsView()
+                case let .city(city): CityView(city: city)
+            }
+        }
+        .alertRoute(AlertRoute.self, in: router)
+    }
+}
+
+enum SheetRoute: Routable {
+    var id: String {
+        switch self {
+        case .profile: return "profile"
+        case .settings: return "settings"
+        case let .city(city): return "city_\(city.rawValue)"
+        }
+    }
+
+    case profile
+    case settings
+    case city(City)
 }
 ```
 
@@ -392,10 +446,15 @@ struct ContentView: View {
 ```swift
 struct ContentView: View {
     @State private var router = Router()
-    
+
     var body: some View {
-        NavigationStack {
-            // ...
+        ZStack {
+            Button(action: {
+                // no need to dismiss previous route
+                router.show(ProfileRoute())
+            }) {
+                Text("Open profile")
+            }
         }
         .route(ProfileRoute.self, in: router, presentationType: .sheet) { _ in
             ProfileView()
@@ -407,6 +466,25 @@ struct ContentView: View {
         .route(CityRoute.self, in: router, presentationType: .sheet) { route in
             CityView(city: route.city)
         }
+    }
+}
+
+struct ProfileRoute: Routable {
+    var id: String { "profile" }
+}
+
+struct SettingsRoute: Routable {
+    var id: String { "settings" }
+}
+
+struct CityRoute: Routable {
+    let city: City
+    var id: String { city.rawValue }
+}
+
+struct ProfileView: View {
+    var body: some View {
+        Text("Profile")
     }
 }
 ```
