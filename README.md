@@ -354,6 +354,84 @@ struct ContentView: View {
 
 ## Advanced Usage
 
+### Route Scope
+
+The `.routeScope()` modifier is the key to properly managing router instances across your navigation hierarchy. It creates a new `Router` instance and injects it into the SwiftUI environment for a specific page.
+
+**Important principles:**
+
+- **One Router per Page**: Each presented or pushed screen should have its own `Router` instance
+- **Shared within a Page**: All subviews within the same page share the same router via `@Environment(Router.self)`
+- **Scope Boundaries**: Use `.routeScope()` when navigating to a new page to create a fresh router for that destination
+
+#### Example: Root View with Route Scope
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationStack {
+            ProfileView()
+                .routeScope()  // Creates a new router for the profile page
+        }
+    }
+}
+```
+
+#### Example: Sharing Router Across Subviews
+
+Within a single page, subviews access the same router from the environment:
+
+```swift
+struct ProfileView: View {
+    @Environment(Router.self) var router
+    
+    var body: some View {
+        VStack {
+            ProfileHeaderView()  // Shares the same router
+            ProfileActionsView()  // Shares the same router
+            
+            Button("Show Alert") {
+                router.show(AlertRoute(message: "Profile page"))
+            }
+        }
+        .alertRoute(AlertRoute.self, in: router)
+    }
+}
+
+struct ProfileHeaderView: View {
+    @Environment(Router.self) var router  // Same router instance
+    
+    var body: some View {
+        Button("Edit Profile") {
+            router.show(AlertRoute(message: "Profile updated"))
+        }
+    }
+}
+
+struct ProfileActionsView: View {
+    @Environment(Router.self) var router  // Same router instance
+    
+    var body: some View {
+        Button("Settings") {
+            router.show(AlertRoute(message: "Profile settings updated"))
+        }
+    }
+}
+```
+
+**Why Route Scope Matters:**
+
+- **Isolation**: Each page's navigation state is isolated and won't interfere with parent or sibling pages
+- **Memory Management**: Router instances are automatically cleaned up when their associated views are dismissed
+- **Clarity**: Makes navigation boundaries explicit in your code
+- **Predictability**: Prevents navigation state conflicts between different parts of your app
+
+> [!TIP]
+> When in doubt, follow this rule: If you're navigating to a new full screen (push, sheet, or full screen cover), add `.routeScope()` to the destination view. If you're just splitting up a single screen into reusable subviews, share the router via `@Environment`.
+
+> [!TIP]
+> You can follow the rule to never explicitely create Router instances but always use `.routeScope()` modifier and Environment. If the same view can be embeded as subview or presented as a new page `.routeScope()` will allow to define a new scope or use existing one.
+
 ### Protocol Composition
 
 Create rich route types with metadata protocols:
@@ -395,6 +473,8 @@ if let profileRoute = router.item(as: ProfileRoute.self) {
     print("Viewing profile: \(profileRoute.userId)")
 }
 ```
+
+
 
 ## Architecture
 
