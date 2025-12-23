@@ -23,7 +23,7 @@ import Foundation
         item = nil
     }
     
-    public func item<To>(as: To.Type) -> To? {
+    public func item<To>(as: To.Type = To.self) -> To? {
         item as? To
     }
 }
