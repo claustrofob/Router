@@ -21,7 +21,8 @@ import UIKit
         }
         return path[0]
     }
-    
+
+    // `perform` returns true if it successfully managed the next route
     public func manage(_ perform: (any Routable) -> Bool) {
         guard let route = next() else {
             return

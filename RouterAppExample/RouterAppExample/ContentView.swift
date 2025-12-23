@@ -29,6 +29,12 @@ struct ContentView: View {
                 }) {
                     Text("Route scope example")
                 }
+
+                Button(action: {
+                    router.show(ExampleRouteItem.universalLinks)
+                }) {
+                    Text("Universal Links example")
+                }
             }
             .background(.clear)
             .navigationTitle("Router App")
@@ -42,6 +48,8 @@ struct ContentView: View {
                 case .routeScope:
                     RouteScopeView()
                         .routeScope()
+                case .universalLinks:
+                    UniversalLinkRootView()
                 }
             }
             .route(
@@ -61,6 +69,7 @@ enum ExampleRouteItem: String, Routable {
     var id: String { rawValue }
     case simpleViews
     case routeScope
+    case universalLinks
 }
 
 struct CustomPresentationRoute: Routable {
