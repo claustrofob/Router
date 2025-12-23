@@ -17,19 +17,9 @@ struct UniversalLinks3View: View {
                 UniversalLinks4View()
                     .environment(universalLinkRouter)
             }
-            .onAppear {
-                manageUniversalLink()
+            .universalLinkObserver(universalLinkRouter, router: router) {
+                $0 is UniversalLink4Route
             }
-    }
-
-    private func manageUniversalLink() {
-        universalLinkRouter.manage { route in
-            if route is UniversalLink4Route {
-                router.show(route)
-                return true
-            }
-            return false
-        }
     }
 }
 

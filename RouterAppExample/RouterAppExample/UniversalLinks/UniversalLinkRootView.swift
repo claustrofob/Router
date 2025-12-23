@@ -22,8 +22,6 @@ struct UniversalLinkRootView: View {
                 UniversalLink4Route(),
                 UniversalLink4ConfirmationRoute(),
             ])
-
-            manageUniversalLink()
         }) {
             Text("Follow universal link")
         }
@@ -31,20 +29,18 @@ struct UniversalLinkRootView: View {
             UniversalLinks1View()
                 .environment(universalLinkRouter)
         }
-        .environment(universalLinkRouter)
-    }
-
-    private func manageUniversalLink() {
-        universalLinkRouter.manage { route in
-            if route is UniversalLink1Route {
-                router.show(route)
-                return true
-            }
-            return false
+        // `universalLinkStarter` must be attached to the root view that always exists. It listens to route changes.
+        // `universalLinkObserver` must be attached on all other views. It listens to `onApear` event.
+        .universalLinkStarter(universalLinkRouter, router: router) {
+            $0 is UniversalLink1Route
         }
+        .environment(universalLinkRouter)
     }
 }
 
 struct UniversalLink1Route: Routable {
     var id: String { "universalLink1" }
 }
+
+
+

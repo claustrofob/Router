@@ -7,6 +7,8 @@ import UIKit
 
 @MainActor
 @Observable public class UniversalLinkRouter {
+    var isStarted: Bool { !path.isEmpty }
+
     private var path: [any Routable] = []
     
     public init() {}

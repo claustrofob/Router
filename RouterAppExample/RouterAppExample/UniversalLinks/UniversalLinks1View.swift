@@ -18,19 +18,9 @@ struct UniversalLinks1View: View {
                     UniversalLinks2View()
                 }
             }
-            .onAppear {
-                manageUniversalLink()
+            .universalLinkObserver(universalLinkRouter, router: router) {
+                $0 is UniversalLink2Route
             }
-    }
-
-    private func manageUniversalLink() {
-        universalLinkRouter.manage { route in
-            if route is UniversalLink2Route {
-                router.show(route)
-                return true
-            }
-            return false
-        }
     }
 }
 

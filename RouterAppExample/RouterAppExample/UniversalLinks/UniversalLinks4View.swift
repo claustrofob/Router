@@ -27,19 +27,9 @@ struct UniversalLinks4View: View {
                         Text("Ok")
                     }
             })
-            .onAppear {
-                manageUniversalLink()
+            .universalLinkObserver(universalLinkRouter, router: router) {
+                $0 is UniversalLink4ConfirmationRoute
             }
-    }
-
-    private func manageUniversalLink() {
-        universalLinkRouter.manage { route in
-            if route is UniversalLink4ConfirmationRoute {
-                router.show(route)
-                return true
-            }
-            return false
-        }
     }
 }
 
