@@ -61,7 +61,6 @@ dependencies: [
 ```
 
 ## Quick Start
-
 ### 1. Define Your Routes
 
 Create routes as enums or structs conforming to `Routable`:
@@ -474,7 +473,9 @@ if let profileRoute = router.item(as: ProfileRoute.self) {
 }
 ```
 
+#### Coordinator pattern
 
+Router is a good friend of Coordinator pattern. Check RouterAppExample for "Coordinator pattern example"
 
 ## Architecture
 
@@ -639,3 +640,4 @@ Created by Mikalai Zmachynski
 ## Acknowledgments
 
 Built with modern SwiftUI patterns and the `@Observable` macro for optimal performance and developer experience.
+
