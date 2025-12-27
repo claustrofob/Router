@@ -35,6 +35,12 @@ struct ContentView: View {
                 }) {
                     Text("Universal Links example")
                 }
+
+                Button(action: {
+                    router.show(ExampleRouteItem.coordinator)
+                }) {
+                    Text("Coordinator pattern example")
+                }
             }
             .background(.clear)
             .navigationTitle("Router App")
@@ -50,6 +56,8 @@ struct ContentView: View {
                         .routeScope()
                 case .universalLinks:
                     UniversalLinkRootView()
+                case .coordinator:
+                    CoordinatorRootView()
                 }
             }
             .route(
@@ -70,6 +78,7 @@ enum ExampleRouteItem: String, Routable {
     case simpleViews
     case routeScope
     case universalLinks
+    case coordinator
 }
 
 struct CustomPresentationRoute: Routable {
