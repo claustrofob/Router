@@ -6,7 +6,7 @@
 import SwiftUI
 import Router
 
-struct RouteScopeView: View {
+struct RouterScopeExampleView: View {
     @Environment(Router.self) var router
 
     var body: some View {
@@ -24,8 +24,8 @@ struct RouteScopeView: View {
 
             HStack {
                 Group {
-                    RouteScopeViewSubviewOne()
-                    RouteScopeViewSubviewTwo()
+                    RouterScopeExampleViewSubviewOne()
+                    RouterScopeExampleViewSubviewTwo()
                 }
                 .padding()
                 .background(Color.gray.opacity(0.1))
@@ -42,9 +42,9 @@ struct RouteScopeView: View {
             in: router
         )
         .route(RouteScopeDetailsRoute.self, in: router, presentationType: .navigationStack) { _ in
-            RouteScopeDetailsView()
+            RouterScopeExampleDetailsView()
                 // define a new route scope, because this is a new page
-                .routeScope()
+                .routerScope()
         }
     }
 }

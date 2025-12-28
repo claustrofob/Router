@@ -475,7 +475,7 @@ if let profileRoute = router.item(as: ProfileRoute.self) {
 
 ### Coordinator pattern
 
-Router is a good friend of Coordinator pattern. Check RouterAppExample for "Coordinator pattern example"
+Router is a good friend of Coordinator pattern. Check RouterAppExample for "Coordinator pattern example one" and "Coordinator pattern example two"
 
 ```swift
 struct AppCoordinator: View {

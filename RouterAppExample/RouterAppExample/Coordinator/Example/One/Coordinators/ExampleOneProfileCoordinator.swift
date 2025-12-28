@@ -1,7 +1,12 @@
+//
+//  Created by Mikalai Zmachynski.
+//  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
+//
+
 import SwiftUI
 import Router
 
-struct ProfileCoordinator: View {
+struct ExampleOneProfileCoordinator: View {
     @Environment(Router.self) var router
 
     var body: some View {
@@ -12,10 +17,10 @@ struct ProfileCoordinator: View {
         }))
         .route(ProfileEditRoute.self, in: router, presentationType: .sheet) { _ in
             NavigationStack {
-                ProfileEditCoordinator(output: .init(didSelectClose: {
+                ExampleOneProfileEditCoordinator(output: .init(didSelectClose: {
                     router.dismiss()
                 }))
-                .routeScope()
+                .routerScope()
             }
         }
         .route(ProfileSettingsRoute.self, in: router, presentationType: .navigationStack) { _ in

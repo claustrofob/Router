@@ -37,9 +37,15 @@ struct ContentView: View {
                 }
 
                 Button(action: {
-                    router.show(ExampleRouteItem.coordinator)
+                    router.show(ExampleRouteItem.coordinatorExampleOne)
                 }) {
-                    Text("Coordinator pattern example")
+                    Text("Coordinator pattern example one")
+                }
+
+                Button(action: {
+                    router.show(ExampleRouteItem.coordinatorExampleTwo)
+                }) {
+                    Text("Coordinator pattern example two")
                 }
             }
             .background(.clear)
@@ -52,12 +58,14 @@ struct ContentView: View {
                 case .simpleViews:
                     SimpleViewsExample()
                 case .routeScope:
-                    RouteScopeView()
-                        .routeScope()
+                    RouterScopeExampleView()
+                        .routerScope()
                 case .universalLinks:
                     UniversalLinkRootView()
-                case .coordinator:
-                    CoordinatorRootView()
+                case .coordinatorExampleOne:
+                    ExampleOneCoordinatorRootView()
+                case .coordinatorExampleTwo:
+                    ExampleTwoCoordinatorRootView()
                 }
             }
             .route(
@@ -78,7 +86,8 @@ enum ExampleRouteItem: String, Routable {
     case simpleViews
     case routeScope
     case universalLinks
-    case coordinator
+    case coordinatorExampleOne
+    case coordinatorExampleTwo
 }
 
 struct CustomPresentationRoute: Routable {

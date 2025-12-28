@@ -1,3 +1,8 @@
+//
+//  Created by Mikalai Zmachynski.
+//  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
+//
+
 import SwiftUI
 
 struct RootView: View {
@@ -13,6 +18,5 @@ struct RootView: View {
                 output.didSelectProfile()
             }.buttonStyle(.bordered)
         }
-        .navigationTitle(Text("Coordinators example"))
     }
 }

@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-private struct RouteScopeModifier: ViewModifier {
+private struct RouterScopeModifier: ViewModifier {
     @State private var router = Router()
 
     func body(content: Content) -> some View {
@@ -15,7 +15,7 @@ private struct RouteScopeModifier: ViewModifier {
 
 @MainActor
 public extension View {
-    func routeScope() -> some View {
-        modifier(RouteScopeModifier())
+    func routerScope() -> some View {
+        modifier(RouterScopeModifier())
     }
 }

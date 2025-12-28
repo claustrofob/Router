@@ -6,7 +6,7 @@
 import SwiftUI
 import Router
 
-struct RouteScopeDetailsView: View {
+struct RouterScopeExampleDetailsView: View {
     @Environment(Router.self) var router
 
     var body: some View {
