@@ -634,7 +634,6 @@ enum SheetRoute: Routable {
 }
 ```
 
-
 ## Requirements
 
 - iOS 17.0+
@@ -647,7 +646,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-Router is available under the MIT license. See the LICENSE file for more info.
+Router is available under the MIT license. See the [LICENSE file](LICENSE) for details.
 
 ## Author
 
