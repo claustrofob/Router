@@ -3,8 +3,8 @@
 //  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
 //
 
-import SwiftUI
 import Router
+import SwiftUI
 
 // In this example there is a separate coordinator for every page,
 // because one router instance serves navigation within one page

@@ -11,7 +11,7 @@ public extension View {
         router: Router,
         perform: @escaping (any Routable) -> Bool
     ) -> some View {
-        self.onAppear {
+        onAppear {
             universalLinkRouter.manage {
                 guard perform($0) else { return false }
                 router.show($0)

@@ -10,7 +10,7 @@ public struct RoutableTabView<Content: View>: View {
     private let router: Router
     private let tab = RoutableTab()
     @ViewBuilder private let content: (RoutableTab) -> Content
-    
+
     public init(
         router: Router,
         @ViewBuilder content: @escaping (RoutableTab) -> Content
@@ -18,7 +18,7 @@ public struct RoutableTabView<Content: View>: View {
         self.router = router
         self.content = content
     }
-    
+
     public var body: some View {
         TabView(selection: Binding<String>(get: {
             router.item?.id ?? tab.defaultRouteID ?? ""

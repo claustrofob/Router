@@ -9,11 +9,11 @@ final class ExamplePresentationPresentingAnimator: NSObject, UIViewControllerAni
     private enum Constants {
         static var duration: TimeInterval { 0.4 }
     }
-    
+
     private var animator: UIViewPropertyAnimator?
-    
+
     func transitionDuration(
-        using transitionContext: UIViewControllerContextTransitioning?
+        using _: UIViewControllerContextTransitioning?
     ) -> TimeInterval {
         Constants.duration
     }
@@ -27,20 +27,20 @@ final class ExamplePresentationPresentingAnimator: NSObject, UIViewControllerAni
         else {
             return
         }
-        
+
         let animator = UIViewPropertyAnimator(
             duration: Constants.duration,
             controlPoint1: CGPoint(x: 0.16, y: 0.87),
             controlPoint2: CGPoint(x: 0.29, y: 0.99)
         )
-        
+
         let translation = CGAffineTransform(
             translationX: 0,
             y: transitionContext.containerView.frame.height - presentationController.targetViewTopOffset
         )
         let scale = CGAffineTransform(scaleX: 0.9, y: 0.9)
         targetView.transform = CGAffineTransformConcat(scale, translation)
-        
+
         animator.addAnimations {
             targetView.transform = .identity
             backView.slideOut()
@@ -53,8 +53,8 @@ final class ExamplePresentationPresentingAnimator: NSObject, UIViewControllerAni
         animator.startAnimation()
         self.animator = animator
     }
-    
-    func animationEnded(_ transitionCompleted: Bool) {
+
+    func animationEnded(_: Bool) {
         animator = nil
     }
 }

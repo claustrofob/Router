@@ -3,8 +3,8 @@
 //  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
 //
 
-import SwiftUI
 import Router
+import SwiftUI
 
 struct RouterScopeExampleView: View {
     @Environment(Router.self) var router

@@ -9,13 +9,13 @@ final class ExamplePresentationDismissingAnimator: NSObject {
     private enum Constants {
         static var duration: TimeInterval { 0.4 }
     }
-    
+
     var animator: UIViewPropertyAnimator?
 }
- 
+
 extension ExamplePresentationDismissingAnimator: UIViewControllerAnimatedTransitioning {
     func transitionDuration(
-        using transitionContext: UIViewControllerContextTransitioning?
+        using _: UIViewControllerContextTransitioning?
     ) -> TimeInterval {
         Constants.duration
     }
@@ -24,8 +24,8 @@ extension ExamplePresentationDismissingAnimator: UIViewControllerAnimatedTransit
         animator = ExamplePresentationDismissingAnimatorFactory(transitionContext: transitionContext).create()
         animator?.startAnimation()
     }
-    
-    func animationEnded(_ transitionCompleted: Bool) {
+
+    func animationEnded(_: Bool) {
         animator = nil
     }
 }

@@ -10,13 +10,13 @@ import UIKit
     var isStarted: Bool { !path.isEmpty }
 
     private var path: [any Routable] = []
-    
+
     public init() {}
-    
+
     public func route(to path: [any Routable]) {
         self.path = path
     }
-    
+
     private func next() -> (any Routable)? {
         guard !path.isEmpty else {
             return nil

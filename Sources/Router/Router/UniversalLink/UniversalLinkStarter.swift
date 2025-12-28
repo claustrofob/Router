@@ -11,7 +11,7 @@ public extension View {
         router: Router,
         perform: @escaping (any Routable) -> Bool
     ) -> some View {
-        self.onChange(of: universalLinkRouter.isStarted) { _, newValue in
+        onChange(of: universalLinkRouter.isStarted) { _, newValue in
             guard newValue else { return }
             universalLinkRouter.manage {
                 guard perform($0) else { return false }

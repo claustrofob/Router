@@ -3,37 +3,37 @@
 //  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
 //
 
-import UIKit
 import Router
+import UIKit
 
 class ExamplePresentationController: UIPresentationController {
     var interactiveTransition: ExamplePresentationInteractiveDismissingAnimator?
-    
+
     var dismiss: CustomPresentationTransitionDismissAction?
     var backView: ExamplePresentationBackView?
     var targetView: UIView?
     var targetViewTopOffset: CGFloat {
         isLandscape ? 0 : 60
     }
-    
+
     private var targetTopConsraint: NSLayoutConstraint?
-    
+
     private var isLandscape: Bool {
         containerView.flatMap {
             $0.bounds.width > $0.bounds.height
         } ?? false
     }
-    
+
     override func presentationTransitionWillBegin() {
         guard let containerView else {
             return
         }
-        
+
         let backView = ExamplePresentationBackView(targetView: presentingViewController.view)
         containerView.pin(subview: backView)
         self.backView = backView
         backView.startUpdates()
-        
+
         let targetView = UIView()
         targetView.clipsToBounds = true
         targetView.layer.cornerRadius = 20
@@ -52,17 +52,17 @@ class ExamplePresentationController: UIPresentationController {
 
         self.targetView = targetView
     }
-    
-    override func presentationTransitionDidEnd(_ completed: Bool) {
+
+    override func presentationTransitionDidEnd(_: Bool) {
         guard let containerView else {
             return
         }
-        
+
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
         gestureRecognizer.maximumNumberOfTouches = 1
         containerView.addGestureRecognizer(gestureRecognizer)
     }
-    
+
     @objc
     private func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         guard
@@ -92,7 +92,7 @@ class ExamplePresentationController: UIPresentationController {
             ()
         }
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate { [weak self] _ in
@@ -103,7 +103,7 @@ class ExamplePresentationController: UIPresentationController {
             containerView?.layoutIfNeeded()
         }
     }
-    
+
     override func dismissalTransitionDidEnd(_ completed: Bool) {
         guard completed else {
             return

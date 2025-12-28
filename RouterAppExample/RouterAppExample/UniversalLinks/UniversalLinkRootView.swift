@@ -3,8 +3,8 @@
 //  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
 //
 
-import SwiftUI
 import Router
+import SwiftUI
 
 struct UniversalLinkRootView: View {
     @State var router = Router()
@@ -41,6 +41,3 @@ struct UniversalLinkRootView: View {
 struct UniversalLink1Route: Routable {
     var id: String { "universalLink1" }
 }
-
-
-

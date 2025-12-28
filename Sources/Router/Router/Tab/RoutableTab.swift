@@ -9,36 +9,36 @@ import SwiftUI
 public final class RoutableTab {
     private var routeIDs = [String]()
     private var routes: [String: any Routable] = [:]
-    
+
     var defaultRouteID: String? {
         routeIDs.first
     }
-    
+
     init() {}
-    
-    func append<Route: Routable>(_ route: Route) {
+
+    func append(_ route: some Routable) {
         guard routes[route.id] == nil else {
             return
         }
         routeIDs.append(route.id)
         routes[route.id] = route
     }
-    
+
     func clear() {
         routeIDs.removeAll()
         routes.removeAll()
     }
-    
+
     func route(by id: String) -> (any Routable)? {
         routes[id]
     }
 }
 
 public extension RoutableTab {
-    func register<Route: Routable, Label: View, Content: View>(
+    func register<Route: Routable>(
         _ route: Route,
-        @ViewBuilder label: @escaping () -> Label,
-        @ViewBuilder content: @escaping (Route) -> Content
+        @ViewBuilder label: @escaping () -> some View,
+        @ViewBuilder content: @escaping (Route) -> some View
     ) -> some View {
         append(route)
         if #available(iOS 17, *) {

@@ -11,7 +11,7 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
     private let router: Router
     private let presentationType: RoutePresentationType
     @ViewBuilder private let routeContent: (Route) -> NewRouteContent
-    
+
     private var typedItemBinding: Binding<Route?> {
         var storedItem: Route?
         return Binding(get: {
@@ -27,7 +27,7 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
             }
         })
     }
-    
+
     init(
         type: Route.Type,
         in router: Router,
@@ -39,7 +39,7 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
         self.presentationType = presentationType
         routeContent = content
     }
-    
+
     func body(content: Content) -> some View {
         switch presentationType {
         case .navigationStack:
@@ -64,11 +64,11 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
 
 @MainActor
 public extension View {
-    func route<Route: Routable, NewContent: View>(
+    func route<Route: Routable>(
         _ type: Route.Type,
         in router: Router,
         presentationType: RoutePresentationType,
-        @ViewBuilder content: @escaping (Route) -> NewContent
+        @ViewBuilder content: @escaping (Route) -> some View
     ) -> some View {
         modifier(RouteModifier(
             type: type,

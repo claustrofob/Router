@@ -9,8 +9,8 @@ struct CustomPresentationModifier<ViewContent: View, Item>: ViewModifier {
     @Binding private var item: Item?
     private let transitionDelegateFactory: CustomPresentationTransitionDelegateFactory
     @ViewBuilder private let viewContent: (Item) -> ViewContent
-    
-    public init(
+
+    init(
         item: Binding<Item?>,
         transitionDelegateFactory: @escaping CustomPresentationTransitionDelegateFactory,
         @ViewBuilder viewContent: @escaping (Item) -> ViewContent
@@ -19,7 +19,7 @@ struct CustomPresentationModifier<ViewContent: View, Item>: ViewModifier {
         self.transitionDelegateFactory = transitionDelegateFactory
         self.viewContent = viewContent
     }
-    
+
     func body(content: Content) -> some View {
         content.background(
             CustomPresentationView(
@@ -32,10 +32,10 @@ struct CustomPresentationModifier<ViewContent: View, Item>: ViewModifier {
 }
 
 public extension View {
-    func customPresentation<ViewContent: View, Item>(
+    func customPresentation<Item>(
         item: Binding<Item?>,
         transitionDelegateFactory: @escaping CustomPresentationTransitionDelegateFactory,
-        @ViewBuilder viewContent: @escaping (Item) -> ViewContent
+        @ViewBuilder viewContent: @escaping (Item) -> some View
     ) -> some View {
         modifier(CustomPresentationModifier(
             item: item,

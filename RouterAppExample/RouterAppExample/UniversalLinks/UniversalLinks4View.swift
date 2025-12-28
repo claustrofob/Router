@@ -3,8 +3,8 @@
 //  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
 //
 
-import SwiftUI
 import Router
+import SwiftUI
 
 struct UniversalLinks4View: View {
     @Environment(UniversalLinkRouter.self) var universalLinkRouter
@@ -21,12 +21,11 @@ struct UniversalLinks4View: View {
                     Text("You are at the final destination")
                 },
                 actionsContent: { _ in
-                    Button(action: {
-                        
-                    }) {
+                    Button(action: {}) {
                         Text("Ok")
                     }
-            })
+                }
+            )
             .universalLinkObserver(universalLinkRouter, router: router) {
                 $0 is UniversalLink4ConfirmationRoute
             }

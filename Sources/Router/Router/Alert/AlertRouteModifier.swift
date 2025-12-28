@@ -12,7 +12,7 @@ private struct AlertRouteModifier<Route: Routable, MessageContent: View, Actions
     private let presentationType: AlertPresentationType
     @ViewBuilder private let messageContent: (Route) -> MessageContent
     @ViewBuilder private let actionsContent: (Route) -> ActionsContent
-    
+
     private var boolItemBinding: Binding<Bool> {
         var storedItem: Route?
         return Binding(get: {
@@ -28,7 +28,7 @@ private struct AlertRouteModifier<Route: Routable, MessageContent: View, Actions
             }
         })
     }
-    
+
     init(
         type: Route.Type,
         in router: Router,
@@ -42,7 +42,7 @@ private struct AlertRouteModifier<Route: Routable, MessageContent: View, Actions
         self.messageContent = messageContent
         self.actionsContent = actionsContent
     }
-    
+
     func body(content: Content) -> some View {
         switch presentationType {
         case .alert:
@@ -77,12 +77,12 @@ private struct AlertRouteModifier<Route: Routable, MessageContent: View, Actions
 
 @MainActor
 public extension View {
-    func alertRoute<Route: Routable, MessageContent: View, ActionsContent: View>(
+    func alertRoute<Route: Routable>(
         _ type: Route.Type,
         in router: Router,
         presentationType: AlertPresentationType = .alert,
-        @ViewBuilder messageContent: @escaping (Route) -> MessageContent,
-        @ViewBuilder actionsContent: @escaping (Route) -> ActionsContent
+        @ViewBuilder messageContent: @escaping (Route) -> some View,
+        @ViewBuilder actionsContent: @escaping (Route) -> some View
     ) -> some View {
         modifier(AlertRouteModifier(
             type: type,
@@ -92,12 +92,12 @@ public extension View {
             actionsContent: actionsContent
         ))
     }
-    
-    func alertRoute<Route: Routable, MessageContent: View>(
+
+    func alertRoute<Route: Routable>(
         _ type: Route.Type,
         in router: Router,
         presentationType: AlertPresentationType = .alert,
-        @ViewBuilder messageContent: @escaping (Route) -> MessageContent
+        @ViewBuilder messageContent: @escaping (Route) -> some View
     ) -> some View {
         modifier(AlertRouteModifier(
             type: type,
@@ -107,9 +107,9 @@ public extension View {
             actionsContent: { _ in }
         ))
     }
-    
-    func alertRoute<Route: Routable & MessageAwareProtocol>(
-        _ type: Route.Type,
+
+    func alertRoute(
+        _ type: (some Routable & MessageAwareProtocol).Type,
         in router: Router,
         presentationType: AlertPresentationType = .alert
     ) -> some View {
@@ -121,12 +121,12 @@ public extension View {
             actionsContent: { _ in }
         ))
     }
-    
-    func alertRoute<Route: Routable & MessageAwareProtocol, ActionsContent: View>(
+
+    func alertRoute<Route: Routable & MessageAwareProtocol>(
         _ type: Route.Type,
         in router: Router,
         presentationType: AlertPresentationType = .alert,
-        @ViewBuilder actionsContent: @escaping (Route) -> ActionsContent
+        @ViewBuilder actionsContent: @escaping (Route) -> some View
     ) -> some View {
         modifier(AlertRouteModifier(
             type: type,
@@ -136,5 +136,4 @@ public extension View {
             actionsContent: actionsContent
         ))
     }
-
 }

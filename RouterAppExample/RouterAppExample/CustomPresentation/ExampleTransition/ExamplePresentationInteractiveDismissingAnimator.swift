@@ -9,17 +9,17 @@ import UIKit
 final class ExamplePresentationInteractiveDismissingAnimator: NSObject, UIViewControllerInteractiveTransitioning {
     weak var transitionContext: (any UIViewControllerContextTransitioning)?
     private var animator: (any UIViewImplicitlyAnimating)?
-    
+
     var isStarted: Bool {
         transitionContext != nil
     }
-    
+
     func startInteractiveTransition(_ transitionContext: any UIViewControllerContextTransitioning) {
         self.transitionContext = transitionContext
         animator = ExamplePresentationDismissingAnimatorFactory(transitionContext: transitionContext).create()
     }
-    
-    func gestureChanged(translation: CGFloat, velocity: CGFloat) {
+
+    func gestureChanged(translation: CGFloat, velocity _: CGFloat) {
         guard
             let transitionContext,
             let fromViewController = transitionContext.viewController(forKey: .from)
@@ -34,7 +34,7 @@ final class ExamplePresentationInteractiveDismissingAnimator: NSObject, UIViewCo
         transitionContext.updateInteractiveTransition(progress)
         animator?.fractionComplete = progress
     }
-    
+
     func gestureCancelled(translation: CGFloat, velocity: CGFloat) {
         guard let transitionContext else {
             return
@@ -43,7 +43,7 @@ final class ExamplePresentationInteractiveDismissingAnimator: NSObject, UIViewCo
         continueAnimation(translation: translation, velocity: velocity)
         transitionContext.cancelInteractiveTransition()
     }
-    
+
     func gestureEnded(translation: CGFloat, velocity: CGFloat) {
         guard
             let transitionContext,
@@ -59,7 +59,7 @@ final class ExamplePresentationInteractiveDismissingAnimator: NSObject, UIViewCo
             gestureCancelled(translation: translation, velocity: velocity)
         }
     }
-    
+
     private func continueAnimation(translation: CGFloat, velocity: CGFloat) {
         guard
             let transitionContext,
@@ -79,9 +79,9 @@ final class ExamplePresentationInteractiveDismissingAnimator: NSObject, UIViewCo
             ? transitionContext.finalFrame(for: fromViewController).height - translation
             : translation
         let relativeVelocityY = distance != 0 ? abs(velocity) / distance : 0
-        
+
         let bounceRatio = min(relativeVelocityY, 100) / 150
-        
+
         let relativeVelocity = CGVector(dx: 0, dy: relativeVelocityY)
         let spring = Spring(duration: 0.5, bounce: 1 * bounceRatio)
         let parameters = UISpringTimingParameters(

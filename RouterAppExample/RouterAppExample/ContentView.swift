@@ -3,8 +3,8 @@
 //  Copyright © 2025 Mikalai Zmachynski. All rights reserved.
 //
 
-import SwiftUI
 import Router
+import SwiftUI
 
 struct ContentView: View {
     @State var router = Router()
@@ -74,7 +74,7 @@ struct ContentView: View {
                 presentationType: .custom { dismiss in
                     ExamplePresentationProvider(dismiss: dismiss)
                 }
-            ) { route in
+            ) { _ in
                 CustomPresentationView()
             }
         }

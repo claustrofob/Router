@@ -8,22 +8,22 @@ import Foundation
 @MainActor
 @Observable public final class Router {
     public var item: (any Routable)?
-    
+
     public init() {}
-    
-    public func show<Item: Routable>(_ item: Item) {
+
+    public func show(_ item: some Routable) {
         self.item = nil
         // this fixes the problem with 2 subsequent alerts
         Task {
             self.item = item
         }
     }
-    
+
     public func dismiss() {
         item = nil
     }
-    
-    public func item<To>(as: To.Type = To.self) -> To? {
+
+    public func item<To>(as _: To.Type = To.self) -> To? {
         item as? To
     }
 }
