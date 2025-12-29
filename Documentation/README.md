@@ -56,11 +56,11 @@ Ideally, we would have a single state variable that controls all presentation ty
 
 ...
 
-content.sheet(item: $sheetItem) { item in
+content.sheet(item: $presentedItem) { item in
     ...
-}.fullScreenCover(item: $sheetItem) { item in
+}.fullScreenCover(item: $presentedItem) { item in
     ...
-}.alert(item: $isPresented1) { item in
+}.alert(item: $presentedItem) { item in
     ...
 }
 ```
