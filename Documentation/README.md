@@ -42,7 +42,7 @@ Conceptually, presentation should be controlled by a single state variable. This
 
 ...
 
-content.sheet(item: $sheetItem) { item in
+content.sheet(item: $presentedItem) { item in
     ...
 }
 ```
