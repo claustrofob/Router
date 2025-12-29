@@ -7,7 +7,9 @@ A type-safe, lightweight, and elegant navigation routing solution for SwiftUI ap
 [![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-<img width="803" height="210" alt="router-logo" src="https://github.com/user-attachments/assets/f0e07c50-e957-4b72-b79c-2dee560d5826" />
+<p align="center">
+    <img width="250" height="250" alt="router_logo" src="https://github.com/user-attachments/assets/54a2ea42-3809-46ea-a758-e98b8bffcec7" />
+</p>
 
 ## Overview
 
