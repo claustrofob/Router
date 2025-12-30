@@ -40,7 +40,7 @@ struct AppView: View {
         VStack {
             AppSubView(router: router)
         }
-                ...
+        ...
     }
 }
 
@@ -74,7 +74,7 @@ struct AppView: View {
         .route(SheetRoute.self, in: router, presentationType: .sheet) {
             ...
         }
-        .route(FullScreen.self, in: router, presentationType: .fullScreen) {
+        .route(FullScreenRoute.self, in: router, presentationType: .fullScreen) {
             ...
         }
     }
