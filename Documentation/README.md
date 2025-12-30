@@ -109,3 +109,6 @@ public protocol Routable: Hashable, Identifiable<String> {}
 `Hashable` is required by `navigationDestination`, `Identifiable` is required by `sheet` and `fullScreenCover`, and `String` is used by `RoutableTabView`.
 
 From this point on, presenting an item is as simple as calling `router.show(...)`. **Router** takes care of the rest - dismissing the currently presented item and presenting the new one.
+
+# Further reading
+- [Using Router in subviews](Subviews.md)
