@@ -15,6 +15,6 @@ public struct RouterScopeView<Content: View>: View {
     }
 
     public var body: some View {
-        content(router)
+        content(router).environment(router)
     }
 }

@@ -29,6 +29,8 @@ Traditional SwiftUI navigation often leads to:
 It's surprising that Apple hasn't addressed these obvious presentation issues with a built-in single source of truth for navigation. 
 Router fills this gap as the missing piece of the SwiftUI ecosystem.
 
+Please read [Design Rationale](./Documentation/README.md) to better understand the basic idea behind Router package.
+
 ## Features
 
 ✨ **Type-Safe Routing** - Define routes as strongly-typed enums or structs conforming to `Routable`
