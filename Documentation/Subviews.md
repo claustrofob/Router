@@ -20,10 +20,10 @@ struct AppView: View {
         VStack {
             AppSubView()
         }
-        .route(SheetRoute.self, in: router, presentationType: .sheet) {
+        .route(SheetRoute.self, in: router, presentationType: .sheet) { _ in
             ...
         }
-        .route(FullScreenRoute.self, in: router, presentationType: .fullScreen) {
+        .route(FullScreenRoute.self, in: router, presentationType: .fullScreen) { _ in
             ...
         }
     }
@@ -71,10 +71,10 @@ struct AppView: View {
         VStack {
             AppSubView()
         }
-        .route(SheetRoute.self, in: router, presentationType: .sheet) {
+        .route(SheetRoute.self, in: router, presentationType: .sheet) { _ in
             ...
         }
-        .route(FullScreenRoute.self, in: router, presentationType: .fullScreen) {
+        .route(FullScreenRoute.self, in: router, presentationType: .fullScreen) { _ in
             ...
         }
     }
@@ -88,3 +88,107 @@ struct AppSubView: View {
     }
 }
 ```
+
+### Router scope view
+
+RouterScopeView solves a different problem: it simplifies the creation and management of router instances in a multi-presentation-context environment. Consider the following code:
+
+```swift
+struct AppView: View {
+    @State private var router = Router()
+
+    var body: some View {
+        VStack {
+            ...
+        }
+        .route(SheetRoute1.self, in: router, presentationType: .sheet) { _ in
+            VStack {
+                ...
+            }
+            .route(SheetRoute2.self, in: router, presentationType: .sheet) { _ in
+                ...
+            }
+        }
+    }
+}
+```
+
+This will not work because the code inside `.route(SheetRoute1.self, in: router, presentationType: .sheet)` creates a new presentation context and therefore requires a new router instance. A first attempt to fix this might look like this:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+    @State private var subRouter = Router()
+
+    var body: some View {
+        VStack {
+            ...
+        }
+        .route(SheetRoute1.self, in: router, presentationType: .sheet) { _ in
+            VStack {
+                ...
+            }
+            .route(SheetRoute2.self, in: subRouter, presentationType: .sheet) { _ in
+                ...
+            }
+        }
+    }
+}
+```
+
+This approach works and the problem is technically solved. However, it has drawbacks: the view’s scope becomes cluttered with multiple routers, and subRouter may retain state that is no longer valid or needed once SheetRoute1 is dismissed.
+
+A more traditional solution is to split the code into two separate views:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+
+    var body: some View {
+        VStack {
+            ...
+        }
+        .route(SheetRoute1.self, in: router, presentationType: .sheet) { _ in
+            ContentSubView()
+        }
+    }
+}
+
+struct ContentSubView: View {
+    @State private var router = Router()
+
+    var body: some View {
+        VStack {
+            ...
+        }
+        .route(SheetRoute2.self, in: router, presentationType: .sheet) { _ in
+            ...
+        }
+    }
+}
+```
+
+This solution is clean and works well. However, it may be inconvenient to create a new view every time you need a new router scope. This is where RouterScopeView comes to the rescue:
+
+```swift
+struct ContentView: View {
+    @State private var router = Router()
+
+    var body: some View {
+        VStack {
+            ...
+        }
+        .route(SheetRoute1.self, in: router, presentationType: .sheet) { _ in
+            RouterScopeView { router in
+                VStack {
+                    ...
+                }
+                .route(SheetRoute2.self, in: router, presentationType: .sheet) { _ in
+                    ...
+                }
+            }
+        }
+    }
+}
+```
+
