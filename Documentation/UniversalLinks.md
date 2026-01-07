@@ -93,9 +93,9 @@ Each presentation (sheet, fullscreen cover, or navigation destination) defines i
 Only the currently presented screen knows how to present the next one.
 
 Universal link routing is performed as follows:
-    1. A single UniversalLinkRouter instance is created at the root view. It stores a queue of routes that represents the app hierarchy to be presented.
-    2. Each presented view dequeues the next route from UniversalLinkRouter and presents the corresponding screen.
-    3. This process repeats until the queue is empty.
+1. A single UniversalLinkRouter instance is created at the root view. It stores a queue of routes that represents the app hierarchy to be presented.
+2. Each presented view dequeues the next route from UniversalLinkRouter and presents the corresponding screen.
+3. This process repeats until the queue is empty.
 
 The initial example can be rewritten using Router and UniversalLinkRouter like this:
 
