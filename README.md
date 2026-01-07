@@ -29,7 +29,10 @@ Traditional SwiftUI navigation often leads to:
 It's surprising that Apple hasn't addressed these obvious presentation issues with a built-in single source of truth for navigation. 
 Router fills this gap as the missing piece of the SwiftUI ecosystem.
 
-Please read [Design Rationale](./Documentation/README.md) to better understand the basic idea behind Router package.
+## Documentation
+- [Design Rationale](./Documentation/README.md) for better understanding the basic idea behind Router package
+- [Using Router in subviews](./Documentation/Subviews.md)
+- [Universal links](./Documentation/UniversalLinks.md) support
 
 ## Features
 
