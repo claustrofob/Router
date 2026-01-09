@@ -7,6 +7,8 @@ import SwiftUI
 
 @MainActor
 public final class RoutableTab {
+    let router: Router
+
     private var routeIDs = [String]()
     private var routes: [String: any Routable] = [:]
 
@@ -14,7 +16,9 @@ public final class RoutableTab {
         routeIDs.first
     }
 
-    init() {}
+    init(router: Router) {
+        self.router = router
+    }
 
     func append(_ route: some Routable) {
         guard routes[route.id] == nil else {
@@ -22,6 +26,8 @@ public final class RoutableTab {
         }
         routeIDs.append(route.id)
         routes[route.id] = route
+
+        router.register(type(of: route))
     }
 
     func clear() {

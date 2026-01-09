@@ -12,22 +12,16 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                Button(action: {
+                Button("Simple views example") {
                     router.show(ExampleRouteItem.simpleViews)
-                }) {
-                    Text("Simple views example")
                 }
 
-                Button(action: {
+                Button("Custom presentation") {
                     router.show(CustomPresentationRoute())
-                }) {
-                    Text("Custom presentation")
                 }
 
-                Button(action: {
+                Button("Route scope example") {
                     router.show(ExampleRouteItem.routeScope)
-                }) {
-                    Text("Route scope example")
                 }
 
                 Button(action: {
@@ -36,16 +30,16 @@ struct ContentView: View {
                     Text("Universal Links example")
                 }
 
-                Button(action: {
+                Button("Coordinator pattern example one") {
                     router.show(ExampleRouteItem.coordinatorExampleOne)
-                }) {
-                    Text("Coordinator pattern example one")
                 }
 
-                Button(action: {
+                Button("Coordinator pattern example two") {
                     router.show(ExampleRouteItem.coordinatorExampleTwo)
-                }) {
-                    Text("Coordinator pattern example two")
+                }
+
+                Button("Tab bar example") {
+                    router.show(ExampleRouteItem.tabBarExample)
                 }
             }
             .background(.clear)
@@ -66,6 +60,8 @@ struct ContentView: View {
                     ExampleOneCoordinatorRootView()
                 case .coordinatorExampleTwo:
                     ExampleTwoCoordinatorRootView()
+                case .tabBarExample:
+                    TabBarExampleView()
                 }
             }
             .route(
@@ -88,6 +84,7 @@ enum ExampleRouteItem: String, Routable {
     case universalLinks
     case coordinatorExampleOne
     case coordinatorExampleTwo
+    case tabBarExample
 }
 
 struct CustomPresentationRoute: Routable {
