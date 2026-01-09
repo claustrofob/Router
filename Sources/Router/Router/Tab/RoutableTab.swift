@@ -41,12 +41,8 @@ public extension RoutableTab {
         @ViewBuilder content: @escaping (Route) -> some View
     ) -> some View {
         append(route)
-        if #available(iOS 17, *) {
-            return content(route)
-                .tabItem { label() }
-                .tag(route.id)
-        } else {
-            return content(route)
-        }
+        return content(route)
+            .tabItem { label() }
+            .tag(route.id)
     }
 }
