@@ -137,22 +137,13 @@ struct ContentView: View {
                                         ) { _ in
                                             Text("Third")
                                         }
-                                        .universalLinkObserver(
-                                            universalLinkRouter,
-                                            router: router
-                                        ) { $0 is ThirdRoute }
+                                        .register(router: router, on: universalLinkRouter)
                                 }
                             }
-                            .universalLinkObserver(
-                                universalLinkRouter,
-                                router: router
-                            ) { $0 is SecondRoute }
+                            .register(router: router, on: universalLinkRouter)
                     }
                 }
-                .universalLinkStarter(
-                    universalLinkRouter,
-                    router: router
-                ) { $0 is FirstRoute }
+                .register(router: router, on: universalLinkRouter)
             }
         }
     }

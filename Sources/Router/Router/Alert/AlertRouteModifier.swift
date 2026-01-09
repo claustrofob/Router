@@ -41,6 +41,8 @@ private struct AlertRouteModifier<Route: Routable, MessageContent: View, Actions
         self.presentationType = presentationType
         self.messageContent = messageContent
         self.actionsContent = actionsContent
+
+        router.register(type)
     }
 
     func body(content: Content) -> some View {

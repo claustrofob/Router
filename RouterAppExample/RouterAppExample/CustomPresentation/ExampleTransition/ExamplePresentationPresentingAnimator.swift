@@ -7,7 +7,7 @@ import UIKit
 
 final class ExamplePresentationPresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     private enum Constants {
-        static var duration: TimeInterval { 0.4 }
+        static var duration: TimeInterval { 0.8 }
     }
 
     private var animator: UIViewPropertyAnimator?

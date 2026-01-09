@@ -18,9 +18,7 @@ struct UniversalLinks2View: View {
                     UniversalLinks3View()
                 }
             }
-            .universalLinkObserver(universalLinkRouter, router: router) {
-                $0 is UniversalLink3Route
-            }
+            .register(router: router, on: universalLinkRouter)
     }
 }
 

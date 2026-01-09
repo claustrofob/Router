@@ -29,11 +29,7 @@ struct UniversalLinkRootView: View {
             UniversalLinks1View()
                 .environment(universalLinkRouter)
         }
-        // `universalLinkStarter` must be attached to the root view that always exists. It listens to route changes.
-        // `universalLinkObserver` must be attached on all other views. It listens to `onApear` event.
-        .universalLinkStarter(universalLinkRouter, router: router) {
-            $0 is UniversalLink1Route
-        }
+        .register(router: router, on: universalLinkRouter)
         .environment(universalLinkRouter)
     }
 }

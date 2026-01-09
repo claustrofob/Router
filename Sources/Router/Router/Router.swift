@@ -8,6 +8,7 @@ import Foundation
 @MainActor
 @Observable public final class Router {
     public var item: (any Routable)?
+    private var registeredRoutes: [any Routable.Type] = []
 
     public init() {}
 
@@ -25,5 +26,14 @@ import Foundation
 
     public func item<To>(as _: To.Type = To.self) -> To? {
         item as? To
+    }
+
+    public func register(_ type: (some Routable).Type) {
+        guard !isRegistered(type) else { return }
+        registeredRoutes.append(type)
+    }
+
+    public func isRegistered(_ type: (some Routable).Type) -> Bool {
+        registeredRoutes.contains(where: { $0 == type })
     }
 }

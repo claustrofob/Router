@@ -7,7 +7,7 @@ import UIKit
 
 final class ExamplePresentationDismissingAnimator: NSObject {
     private enum Constants {
-        static var duration: TimeInterval { 0.4 }
+        static var duration: TimeInterval { 0.8 }
     }
 
     var animator: UIViewPropertyAnimator?

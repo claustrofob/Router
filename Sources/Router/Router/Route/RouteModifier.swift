@@ -38,6 +38,8 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
         self.router = router
         self.presentationType = presentationType
         routeContent = content
+
+        router.register(type)
     }
 
     func body(content: Content) -> some View {
