@@ -19,12 +19,12 @@ import UIKit
         return path[0]
     }
 
-    private func manage(_ perform: (any Routable) -> Bool) {
+    private func processNextItem(in router: Router) {
         guard let route = next() else {
             return
         }
         performWithoutAnimation {
-            if perform(route) {
+            if router.show(route) {
                 path.removeFirst()
             }
         }
@@ -49,12 +49,7 @@ public extension UniversalLinkRouter {
             routers.append(Weak(router))
         }
 
-        manage {
-            let routeType = type(of: $0)
-            guard router.isRegistered(routeType) else { return false }
-            router.show($0)
-            return true
-        }
+        processNextItem(in: router)
     }
 
     func route(to path: [any Routable]) {
@@ -81,11 +76,6 @@ public extension UniversalLinkRouter {
             router.dismiss()
         }
 
-        manage {
-            let routeType = type(of: $0)
-            guard router.isRegistered(routeType) else { return false }
-            router.show($0)
-            return true
-        }
+        processNextItem(in: router)
     }
 }

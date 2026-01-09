@@ -12,12 +12,20 @@ import Foundation
 
     public init() {}
 
-    public func show(_ item: some Routable) {
+    @discardableResult
+    public func show(_ item: some Routable) -> Bool {
+        let itemType = type(of: item)
+        guard isRegistered(itemType) else {
+            assertionFailure("Trying to show unregistered route: \(itemType)")
+            return false
+        }
+
         self.item = nil
         // this fixes the problem with 2 subsequent alerts
         Task {
             self.item = item
         }
+        return true
     }
 
     public func dismiss() {
