@@ -7,13 +7,24 @@ import Foundation
 
 @MainActor
 @Observable public final class Router {
-    public var item: (any Routable)?
-    private var registeredRoutes: [any Routable.Type] = []
+    var item: (any Routable)?
+    private var registeredItems: [any Routable.Type] = []
 
     public init() {}
 
+    func register(_ type: (some Routable).Type) {
+        guard !isRegistered(type) else { return }
+        registeredItems.append(type)
+    }
+
+    func isRegistered(_ type: (some Routable).Type) -> Bool {
+        registeredItems.contains(where: { $0 == type })
+    }
+}
+
+public extension Router {
     @discardableResult
-    public func show(_ item: some Routable) -> Bool {
+    func show(_ item: some Routable) -> Bool {
         let itemType = type(of: item)
         guard isRegistered(itemType) else {
             assertionFailure("Trying to show unregistered route: \(itemType)")
@@ -28,20 +39,11 @@ import Foundation
         return true
     }
 
-    public func dismiss() {
+    func dismiss() {
         item = nil
     }
 
-    public func item<To>(as _: To.Type = To.self) -> To? {
+    func item<To>(as _: To.Type = To.self) -> To? {
         item as? To
-    }
-
-    public func register(_ type: (some Routable).Type) {
-        guard !isRegistered(type) else { return }
-        registeredRoutes.append(type)
-    }
-
-    public func isRegistered(_ type: (some Routable).Type) -> Bool {
-        registeredRoutes.contains(where: { $0 == type })
     }
 }
