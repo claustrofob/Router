@@ -5,6 +5,9 @@
 
 import SwiftUI
 
+/// A scope view that creates and provides a `Router` instance to its content via the environment.
+///
+/// Use `RouterScopeView` to wrap parts of your hierarchy that need access to navigation routing.
 public struct RouterScopeView<Content: View>: View {
     @State private var router = Router()
 

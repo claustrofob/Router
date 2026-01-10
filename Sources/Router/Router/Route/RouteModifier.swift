@@ -66,6 +66,19 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
 
 @MainActor
 public extension View {
+    /// Attaches routing for a specific `Routable` type to this view.
+    ///
+    /// This modifier registers the route type with the provided `Router` and
+    /// presents content for a matching route using the specified `presentationType`.
+    /// When the router publishes an item of the given type, the corresponding
+    /// destination is shown and dismissed when the binding is cleared.
+    ///
+    /// - Parameters:
+    ///   - type: The concrete `Routable` type to handle.
+    ///   - router: The shared `Router` instance coordinating navigation.
+    ///   - presentationType: How the route should be presented (navigation destination, sheet, full screen, or custom).
+    ///   - content: A builder that returns the destination view for a given route instance.
+    /// - Returns: A view that can present destinations for the given route type.
     func route<Route: Routable>(
         _ type: Route.Type,
         in router: Router,

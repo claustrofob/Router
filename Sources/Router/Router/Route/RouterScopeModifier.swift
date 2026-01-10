@@ -15,6 +15,9 @@ private struct RouterScopeModifier: ViewModifier {
 
 @MainActor
 public extension View {
+    /// Applies a Router scope to the view hierarchy by injecting a shared `Router`
+    /// instance into the environment. Use this on a container view so all child views
+    /// can access navigation via `@Environment(Router.self)`.
     func routerScope() -> some View {
         modifier(RouterScopeModifier())
     }

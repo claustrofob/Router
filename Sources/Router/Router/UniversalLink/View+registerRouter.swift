@@ -6,6 +6,16 @@
 import SwiftUI
 
 public extension View {
+    /// Registers a `Router` with the provided `UniversalLinkRouter` on the first appearance of the view.
+    ///
+    /// Use this modifier to connect a `Router` to a shared `UniversalLinkRouter` so that
+    /// universal links (or other external routing events) can be handled by this view hierarchy.
+    /// Registration occurs once, the first time the view appears, via `onFirstAppear`.
+    ///
+    /// - Parameters:
+    ///   - router: The view's `Router` instance to register for handling navigation actions.
+    ///   - universalLinkRouter: The shared `UniversalLinkRouter` that coordinates universal link routing.
+    /// - Returns: A view that performs the registration on first appearance and otherwise renders unchanged.
     func register(
         router: Router,
         on universalLinkRouter: UniversalLinkRouter
