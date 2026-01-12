@@ -7,7 +7,7 @@ import Router
 import SwiftUI
 
 struct TabBarExampleView: View {
-    @State var router = Router()
+    @State var router = TabRouter()
 
     var body: some View {
         RoutableTabView(router: router) { tab in

@@ -7,7 +7,7 @@ import SwiftUI
 
 @MainActor
 public final class RoutableTab {
-    let router: Router
+    let router: TabRouter
 
     private var routeIDs = [String]()
     private var routes: [String: any Routable] = [:]
@@ -16,7 +16,7 @@ public final class RoutableTab {
         routeIDs.first
     }
 
-    init(router: Router) {
+    init(router: TabRouter) {
         self.router = router
     }
 

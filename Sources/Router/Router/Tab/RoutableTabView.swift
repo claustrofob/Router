@@ -11,7 +11,7 @@ public struct RoutableTabView<Content: View>: View {
     @ViewBuilder private let content: (RoutableTab) -> Content
 
     public init(
-        router: Router,
+        router: TabRouter,
         @ViewBuilder content: @escaping (RoutableTab) -> Content
     ) {
         tab = RoutableTab(router: router)
