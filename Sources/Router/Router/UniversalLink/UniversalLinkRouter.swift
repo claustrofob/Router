@@ -9,24 +9,18 @@ import UIKit
 @Observable public final class UniversalLinkRouter {
     private var routers = [Weak<Router>]()
     private var path: [any Routable] = []
+    private var integrityCheckTask: Task<Void, Error>?
 
     public init() {}
 
-    private func next() -> (any Routable)? {
-        guard !path.isEmpty else {
-            return nil
-        }
-        return path[0]
-    }
-
     private func processNextItem(in router: Router) {
-        guard let route = next() else {
+        guard !path.isEmpty else {
             return
         }
+        let route = path.removeFirst()
         performWithoutAnimation {
-            if router.show(route) {
-                path.removeFirst()
-            }
+            router.show(route)
+            startIntegrityCheckTask()
         }
     }
 
@@ -38,6 +32,14 @@ import UIKit
                 try await Task.sleep(nanoseconds: 100_000_000)
                 UIView.setAnimationsEnabled(true)
             }
+        }
+    }
+
+    private func startIntegrityCheckTask() {
+        integrityCheckTask?.cancel()
+        integrityCheckTask = Task {
+            try await Task.sleep(nanoseconds: 100_000_000)
+            assert(path.isEmpty, "UniversalLinkRouter: some routes were not shown \(path)")
         }
     }
 }
