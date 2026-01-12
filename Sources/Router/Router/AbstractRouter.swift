@@ -40,7 +40,7 @@ public extension AbstractRouter {
     func show(_ item: some Routable) -> Bool {
         let itemType = type(of: item)
         guard isRegistered(itemType) else {
-            assertionFailure("Trying to show unregistered route: \(itemType)")
+            assertionFailure("Trying to show route `\(itemType)` that is not registered on this router instance")
             return false
         }
 

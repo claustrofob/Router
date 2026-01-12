@@ -7,10 +7,10 @@ import Router
 import SwiftUI
 
 struct TabBarExampleView: View {
-    @State var router = TabRouter()
+    @State var tabRouter = TabRouter()
 
     var body: some View {
-        RoutableTabView(router: router) { tab in
+        RoutableTabView(router: tabRouter) { tab in
             tab.register(
                 TabMessagesRoute(),
                 label: { Label("Messages", systemImage: "message") }
@@ -18,7 +18,7 @@ struct TabBarExampleView: View {
                 VStack {
                     Text("Messages tab")
                     Button("Go to Profile tab") {
-                        router.show(TabProfileRoute())
+                        tabRouter.show(TabProfileRoute())
                     }
                 }
             }
