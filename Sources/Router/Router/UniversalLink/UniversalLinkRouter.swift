@@ -38,7 +38,7 @@ import UIKit
     private func startIntegrityCheckTask() {
         integrityCheckTask?.cancel()
         integrityCheckTask = Task {
-            try await Task.sleep(nanoseconds: 100_000_000)
+            try await Task.sleep(nanoseconds: 500_000_000)
             assert(path.isEmpty, "UniversalLinkRouter: some routes were not shown \(path)")
         }
     }
@@ -82,6 +82,8 @@ public extension UniversalLinkRouter {
     func route(to path: [any Routable]) {
         routers.reap()
         guard !routers.isEmpty else {
+            self.path = path
+            startIntegrityCheckTask()
             return
         }
 

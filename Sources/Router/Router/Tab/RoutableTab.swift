@@ -47,8 +47,14 @@ public extension RoutableTab {
         @ViewBuilder content: @escaping (Route) -> some View
     ) -> some View {
         append(route)
-        return content(route)
-            .tabItem { label() }
-            .tag(route.id)
+        if #available(iOS 17, *) {
+            // without this check build may fail with the following error:
+            // Undefined symbol: opaque type descriptor for <<opaque return type of (extension in SwiftUI):SwiftUI.View.tag<A where A1: Swift.Hashable>(_: A1, includeOptional: Swift.Bool) -> some>>
+            return content(route)
+                .tabItem { label() }
+                .tag(route.id)
+        } else {
+            return content(route)
+        }
     }
 }
