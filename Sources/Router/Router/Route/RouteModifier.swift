@@ -7,6 +7,8 @@ import SwiftUI
 
 @MainActor
 private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifier {
+    @Environment(\.routerNamespace) private var routerNamespace
+
     private let type: Route.Type
     private let router: Router
     private let presentationType: RoutePresentationType
@@ -46,19 +48,27 @@ private struct RouteModifier<Route: Routable, NewRouteContent: View>: ViewModifi
         switch presentationType {
         case .navigationStack:
             content.navigationDestination(item: typedItemBinding) { route in
-                routeContent(route).id(route.id)
+                routeContent(route)
+                    .id(route.id)
+                    .environment(\.routerNamespace, router.namespace(for: route))
             }
         case .sheet:
             content.sheet(item: typedItemBinding) { route in
-                routeContent(route).id(route.id)
+                routeContent(route)
+                    .id(route.id)
+                    .environment(\.routerNamespace, router.namespace(for: route))
             }
         case .fullScreen:
             content.fullScreenCover(item: typedItemBinding) { route in
-                routeContent(route).id(route.id)
+                routeContent(route)
+                    .id(route.id)
+                    .environment(\.routerNamespace, router.namespace(for: route))
             }
         case let .custom(transitionDelegateFactory):
             content.customPresentation(item: typedItemBinding, transitionDelegateFactory: transitionDelegateFactory) { route in
-                routeContent(route).id(route.id)
+                routeContent(route)
+                    .id(route.id)
+                    .environment(\.routerNamespace, router.namespace(for: route))
             }
         }
     }

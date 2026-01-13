@@ -5,6 +5,18 @@
 
 import SwiftUI
 
+private struct RouterRegisterModifier: ViewModifier {
+    @Environment(\.routerNamespace) private var routerNamespace
+    let router: AbstractRouter
+    let universalLinkRouter: UniversalLinkRouter
+
+    func body(content: Content) -> some View {
+        content.onFirstAppear {
+            universalLinkRouter.register(router, namespace: routerNamespace)
+        }
+    }
+}
+
 public extension View {
     /// Registers a `Router` with the provided `UniversalLinkRouter` on the first appearance of the view.
     ///
@@ -20,8 +32,6 @@ public extension View {
         router: Router,
         on universalLinkRouter: UniversalLinkRouter
     ) -> some View {
-        onFirstAppear {
-            universalLinkRouter.register(router)
-        }
+        modifier(RouterRegisterModifier(router: router, universalLinkRouter: universalLinkRouter))
     }
 }

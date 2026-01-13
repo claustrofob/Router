@@ -7,13 +7,14 @@ import UIKit
 
 @MainActor
 @Observable public final class UniversalLinkRouter {
-    private var routers = [Weak<Router>]()
+    private var rootNamespace = Constants.rootRouterNamespace
+    private let storage = RouterStorage()
     private var path: [any Routable] = []
     private var integrityCheckTask: Task<Void, Error>?
 
     public init() {}
 
-    private func processNextItem(in router: Router) {
+    private func processNextItem(in router: AbstractRouter) {
         guard !path.isEmpty else {
             return
         }
@@ -42,61 +43,34 @@ import UIKit
             assert(path.isEmpty, "UniversalLinkRouter: some routes were not shown \(path)")
         }
     }
+
+    func register(_ router: AbstractRouter, namespace: RouterNamespace) {
+        if storage.isEmpty {
+            rootNamespace = namespace
+        }
+        storage.add(router, in: namespace)
+        processNextItem(in: router)
+    }
 }
 
 public extension UniversalLinkRouter {
-    /// Registers a router instance with the universal link routing system.
-    ///
-    /// This method keeps a weak reference to the provided router, avoiding retain
-    /// cycles and duplicate registrations. If the router isn't already present
-    /// in the internal list, it's appended. After registration, the router is
-    /// asked to process the next pending route (if any), enabling deferred
-    /// universal link handling once a suitable router becomes available.
-    ///
-    /// - Parameter router: The `Router` to register and potentially use to
-    ///   handle the next pending `Routable` item.
-    func register(_ router: Router) {
-        routers.reap()
-        if !routers.contains(where: { $0.value === router }) {
-            routers.append(Weak(router))
-        }
-
-        processNextItem(in: router)
-    }
-
-    /// Routes to the provided path of `Routable` items using the registered routers.
-    ///
-    /// This method compares the current router stack with the requested `path` and
-    /// finds the first index at which they diverge (by matching `item.id`). It then:
-    /// 1) Picks the router at the divergence point,
-    /// 2) Stores the remaining segments of the requested path for deferred handling,
-    /// 3) Dismisses the current presentation on that router without animation, and
-    /// 4) Asks the router to process the next pending route segment.
-    ///
-    /// If there are no registered routers, or the router at the divergence index
-    /// is unavailable, the call is a no-op.
-    ///
-    /// - Parameter path: An ordered list of `Routable` items representing the desired
-    ///   navigation path (from root to destination). Consecutive leading items that
-    ///   already match the existing router stack are skipped.
     func route(to path: [any Routable]) {
-        routers.reap()
-        guard !routers.isEmpty else {
-            self.path = path
-            startIntegrityCheckTask()
+        guard !storage.isEmpty else {
             return
         }
 
+        var namespace = rootNamespace
         var index = 0
         while
-            index < routers.count,
             index < path.count,
-            routers[index].value?.item?.id == path[index].id
+            let router = storage.router(by: namespace),
+            router.item?.id == path[index].id
         {
+            namespace = router.namespace(for: path[index])
             index += 1
         }
 
-        guard let router = routers[index].value else {
+        guard let router = storage.router(by: namespace) else {
             return
         }
 

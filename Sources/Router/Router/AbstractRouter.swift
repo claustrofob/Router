@@ -20,6 +20,10 @@ import Foundation
     func isRegistered(_ type: (some Routable).Type) -> Bool {
         registeredTypes.contains("\(type)")
     }
+
+    func namespace(for route: any Routable) -> RouterNamespace {
+        "\(ObjectIdentifier(self))_\(route.id)"
+    }
 }
 
 public extension AbstractRouter {

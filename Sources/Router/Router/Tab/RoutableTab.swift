@@ -53,6 +53,7 @@ public extension RoutableTab {
             return content(route)
                 .tabItem { label() }
                 .tag(route.id)
+                .environment(\.routerNamespace, router.namespace(for: route))
         } else {
             return content(route)
         }

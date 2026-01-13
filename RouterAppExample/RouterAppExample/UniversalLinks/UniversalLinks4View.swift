@@ -17,7 +17,7 @@ struct UniversalLinks4View: View {
                 universalLinkRouter.route(to: [
                     UniversalLink1Route(),
                     UniversalLink2Route(),
-                    UniversalLink3Route(),
+                    // UniversalLink3Route(),
                 ])
             }
         }
