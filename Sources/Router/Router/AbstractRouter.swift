@@ -7,6 +7,8 @@ import Foundation
 
 @MainActor
 @Observable public class AbstractRouter {
+    private let id = UUID().uuidString
+
     var item: (any Routable)?
     private var registeredTypes: Set<String> = []
 
@@ -22,7 +24,7 @@ import Foundation
     }
 
     func namespace(for route: any Routable) -> RouterNamespace {
-        "\(ObjectIdentifier(self))_\(route.id)"
+        "\(id)_\(route.id)"
     }
 }
 

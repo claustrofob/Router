@@ -11,7 +11,8 @@ private struct RouterRegisterModifier: ViewModifier {
     let universalLinkRouter: UniversalLinkRouter
 
     func body(content: Content) -> some View {
-        content.onFirstAppear {
+        content.task {
+            try? await Task.sleep(nanoseconds: 10_000_000)
             universalLinkRouter.register(router, namespace: routerNamespace)
         }
     }
@@ -29,7 +30,7 @@ public extension View {
     ///   - universalLinkRouter: The shared `UniversalLinkRouter` that coordinates universal link routing.
     /// - Returns: A view that performs the registration on first appearance and otherwise renders unchanged.
     func register(
-        router: Router,
+        router: AbstractRouter,
         on universalLinkRouter: UniversalLinkRouter
     ) -> some View {
         modifier(RouterRegisterModifier(router: router, universalLinkRouter: universalLinkRouter))

@@ -19,13 +19,10 @@ public struct RoutableTabView<Content: View>: View {
     }
 
     public var body: some View {
-        TabView(selection: Binding<String>(get: {
-            tab.router.item?.id ?? tab.defaultRouteID ?? ""
+        TabView(selection: Binding<String?>(get: {
+            tab.activeRouteID
         }, set: { id in
-            guard let item = tab.route(by: id) else {
-                return
-            }
-            tab.router.item = item
+            tab.activeRouteID = id
         })) {
             let _ = tab.clear()
             content(tab)

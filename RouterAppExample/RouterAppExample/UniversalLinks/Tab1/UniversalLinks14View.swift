@@ -6,24 +6,28 @@
 import Router
 import SwiftUI
 
-struct UniversalLinks4View: View {
+struct UniversalLinks14View: View {
     @Environment(UniversalLinkRouter.self) var universalLinkRouter
     @State var router = Router()
 
     var body: some View {
         VStack {
-            Text("Universal Links 4 View")
+            Text("Universal Links 1.4 View")
             Button("Follow universal link 2") {
                 universalLinkRouter.route(to: [
-                    UniversalLink1Route(),
-                    UniversalLink2Route(),
-                    // UniversalLink3Route(),
+                    //                    UniversalLinkTab1Route(),
+//                    UniversalLink1Route(),
+//                    UniversalLink2Route(),
+//                    UniversalLink3Route(),
+
+                    UniversalLinkTab2Route(),
+                    UniversalLink21Route(),
                 ])
             }
         }
         .navigationTitle("Universal Links 4")
         .alertRoute(
-            UniversalLink4ConfirmationRoute.self,
+            UniversalLink14ConfirmationRoute.self,
             in: router,
             presentationType: .confirmation,
             messageContent: { _ in
@@ -35,17 +39,17 @@ struct UniversalLinks4View: View {
                 }
             }
         )
-        .alertRoute(UniversalLink4AlertRoute.self, in: router) { _ in
+        .alertRoute(UniversalLink14AlertRoute.self, in: router) { _ in
             Text("This is final alert")
         }
         .register(router: router, on: universalLinkRouter)
     }
 }
 
-struct UniversalLink4ConfirmationRoute: Routable {
+struct UniversalLink14ConfirmationRoute: Routable {
     var id: String { "universalLink4Confirmation" }
 }
 
-struct UniversalLink4AlertRoute: Routable {
+struct UniversalLink14AlertRoute: Routable {
     var id: String { "universalLink4Alert" }
 }

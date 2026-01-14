@@ -7,13 +7,26 @@ import SwiftUI
 
 @MainActor
 public final class RoutableTab {
-    let router: TabRouter
-
-    private var routeIDs = [String]()
+    private let router: TabRouter
     private var routes: [String: any Routable] = [:]
 
-    var defaultRouteID: String? {
-        routeIDs.first
+    var activeRouteID: String? {
+        get {
+            router.item?.id
+        }
+        set {
+            guard let newValue else {
+                router.item = nil
+                return
+            }
+
+            guard let item = route(by: newValue) else {
+                assertionFailure("Trying to set not registered route with id `\(newValue)` on TabRouter")
+                return
+            }
+
+            router.item = item
+        }
     }
 
     init(router: TabRouter) {
@@ -24,14 +37,11 @@ public final class RoutableTab {
         guard routes[route.id] == nil else {
             return
         }
-        routeIDs.append(route.id)
         routes[route.id] = route
-
         router.register(type(of: route))
     }
 
     func clear() {
-        routeIDs.removeAll()
         routes.removeAll()
     }
 

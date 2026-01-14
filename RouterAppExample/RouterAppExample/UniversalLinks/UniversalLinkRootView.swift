@@ -7,33 +7,34 @@ import Router
 import SwiftUI
 
 struct UniversalLinkRootView: View {
-    @State var router = Router()
     @State var universalLinkRouter = UniversalLinkRouter()
+    @State var tabRouter = TabRouter()
 
     var body: some View {
-        Button(action: {
-            // convert your real universal link into an array of routes.
-            // The array should reflect the real structure of your app.
-            // Every page decides on its own if it can manage and present the next route in UniversalLinkRouter
-            universalLinkRouter.route(to: [
-                UniversalLink1Route(),
-                UniversalLink2Route(),
-                UniversalLink3Route(),
-                UniversalLink4Route(),
-                UniversalLink4ConfirmationRoute(),
-            ])
-        }) {
-            Text("Follow universal link")
+        RoutableTabView(router: tabRouter) { tab in
+            tab.register(
+                UniversalLinkTab1Route(),
+                label: { Label("Tab 1", systemImage: "person.3.fill") }
+            ) { _ in
+                UniversalLinkTab1View()
+            }
+
+            tab.register(
+                UniversalLinkTab2Route(),
+                label: { Label("Tab 2", systemImage: "person.crop.circle") }
+            ) { _ in
+                UniversalLinkTab2View()
+            }
         }
-        .route(UniversalLink1Route.self, in: router, presentationType: .navigationStack) { _ in
-            UniversalLinks1View()
-                .environment(universalLinkRouter)
-        }
-        .register(router: router, on: universalLinkRouter)
+        .register(router: tabRouter, on: universalLinkRouter)
         .environment(universalLinkRouter)
     }
 }
 
-struct UniversalLink1Route: Routable {
-    var id: String { "universalLink1" }
+struct UniversalLinkTab1Route: Routable {
+    var id: String { "tab1" }
+}
+
+struct UniversalLinkTab2Route: Routable {
+    var id: String { "tab2" }
 }

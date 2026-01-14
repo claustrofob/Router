@@ -75,8 +75,22 @@ public extension UniversalLinkRouter {
         }
 
         self.path = Array(path[index...])
+
         performWithoutAnimation {
-            router.dismiss()
+            // if tab was switched we should dismiss all the views on the previous tab
+            if
+                let tabRouter = router as? TabRouter,
+                let currentTabRoute = tabRouter.item,
+                let nextTabRoute = path.first,
+                currentTabRoute.id != nextTabRoute.id
+            {
+                let namespace = tabRouter.namespace(for: currentTabRoute)
+                if let subRouter = storage.router(by: namespace) {
+                    subRouter.dismiss()
+                }
+            } else {
+                router.dismiss()
+            }
         }
 
         processNextItem(in: router)

@@ -6,22 +6,22 @@
 import Router
 import SwiftUI
 
-struct UniversalLinks2View: View {
+struct UniversalLinks11View: View {
     @Environment(UniversalLinkRouter.self) var universalLinkRouter
     @State var router = Router()
 
     var body: some View {
-        Text("Universal Links 2 View")
-            .navigationTitle("Universal Links 2")
-            .route(UniversalLink3Route.self, in: router, presentationType: .sheet) { _ in
+        Text("Universal Links 1.1 View")
+            .navigationTitle("Universal Links 1")
+            .route(UniversalLink12Route.self, in: router, presentationType: .sheet) { _ in
                 NavigationStack {
-                    UniversalLinks3View()
+                    UniversalLinks12View()
                 }
             }
             .register(router: router, on: universalLinkRouter)
     }
 }
 
-struct UniversalLink3Route: Routable {
-    var id: String { "universalLink3" }
+struct UniversalLink12Route: Routable {
+    var id: String { "universalLink2" }
 }
