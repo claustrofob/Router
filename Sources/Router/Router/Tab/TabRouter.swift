@@ -9,7 +9,38 @@
 /// set to one of the available tabs. TabRouter is intentionally limited to tab navigation and does not
 /// support presenting other route types, helping prevent misuse of routers for non-tab flows.
 public final class TabRouter: AbstractRouter {
+    private var routeIDs = [String]()
+    private var routes = [String: any Routable]()
+
+    override var item: (any Routable)? {
+        get {
+            super.item ?? routeIDs.first.flatMap(route(by:))
+        }
+        set {
+            super.item = newValue
+        }
+    }
+
     override public init() {
         super.init()
+    }
+
+    func register(_ route: some Routable) {
+        guard routes[route.id] == nil else {
+            return
+        }
+        routes[route.id] = route
+        routeIDs.append(route.id)
+        register(type(of: route))
+    }
+
+    func route(by id: String) -> (any Routable)? {
+        routes[id]
+    }
+
+    func clear() {
+        routes.removeAll()
+        routeIDs.removeAll()
+        clearRegistrations()
     }
 }

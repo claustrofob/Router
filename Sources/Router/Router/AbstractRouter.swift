@@ -10,17 +10,22 @@ import Foundation
     private let id = UUID().uuidString
 
     var item: (any Routable)?
+
+    @ObservationIgnored
     private var registeredTypes: Set<String> = []
 
     init() {}
 
     func register(_ type: (some Routable).Type) {
-        guard !isRegistered(type) else { return }
         registeredTypes.insert("\(type)")
     }
 
     func isRegistered(_ type: (some Routable).Type) -> Bool {
         registeredTypes.contains("\(type)")
+    }
+
+    func clearRegistrations() {
+        registeredTypes.removeAll()
     }
 
     func namespace(for route: any Routable) -> RouterNamespace {

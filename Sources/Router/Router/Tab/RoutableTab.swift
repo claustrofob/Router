@@ -8,7 +8,6 @@ import SwiftUI
 @MainActor
 public final class RoutableTab {
     private let router: TabRouter
-    private var routes: [String: any Routable] = [:]
 
     var activeRouteID: String? {
         get {
@@ -20,7 +19,7 @@ public final class RoutableTab {
                 return
             }
 
-            guard let item = route(by: newValue) else {
+            guard let item = router.route(by: newValue) else {
                 assertionFailure("Trying to set not registered route with id `\(newValue)` on TabRouter")
                 return
             }
@@ -33,20 +32,8 @@ public final class RoutableTab {
         self.router = router
     }
 
-    func append(_ route: some Routable) {
-        guard routes[route.id] == nil else {
-            return
-        }
-        routes[route.id] = route
-        router.register(type(of: route))
-    }
-
     func clear() {
-        routes.removeAll()
-    }
-
-    func route(by id: String) -> (any Routable)? {
-        routes[id]
+        router.clear()
     }
 }
 
@@ -56,7 +43,7 @@ public extension RoutableTab {
         @ViewBuilder label: @escaping () -> some View,
         @ViewBuilder content: @escaping (Route) -> some View
     ) -> some View {
-        append(route)
+        router.register(route)
         if #available(iOS 17, *) {
             // without this check build may fail with the following error:
             // Undefined symbol: opaque type descriptor for <<opaque return type of (extension in SwiftUI):SwiftUI.View.tag<A where A1: Swift.Hashable>(_: A1, includeOptional: Swift.Bool) -> some>>
