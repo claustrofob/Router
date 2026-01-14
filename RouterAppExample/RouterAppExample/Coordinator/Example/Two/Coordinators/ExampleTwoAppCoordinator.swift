@@ -19,7 +19,7 @@ struct ExampleTwoAppCoordinator: View {
         }))
         .route(ProfileRoute.self, in: rootRouter, presentationType: .navigationStack) { _ in
             // here is a new router scope that serves Profile page navigation
-            RouterScopeView { profileRouter in
+            RouterScopeView { (profileRouter: Router) in
                 ProfileView(output: .init(didSelectEdit: {
                     profileRouter.show(ProfileEditRoute())
                 }, didSelectSettings: {
@@ -28,7 +28,7 @@ struct ExampleTwoAppCoordinator: View {
                 .route(ProfileEditRoute.self, in: profileRouter, presentationType: .sheet) { _ in
                     NavigationStack {
                         // here is a new router scope that serves Edit Profile page navigation
-                        RouterScopeView { editProfileRouter in
+                        RouterScopeView { (editProfileRouter: Router) in
                             ProfileEditView(output: .init(didSelectClose: {
                                 profileRouter.dismiss()
                             }, didSelectSave: { message in

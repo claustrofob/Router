@@ -62,6 +62,7 @@ struct ContentView: View {
                     ExampleTwoCoordinatorRootView()
                 case .tabBarExample:
                     TabBarExampleView()
+                        .routerScope(type: TabRouter.self)
                 }
             }
             .route(

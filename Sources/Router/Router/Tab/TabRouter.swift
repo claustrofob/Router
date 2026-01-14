@@ -21,7 +21,7 @@ public final class TabRouter: AbstractRouter {
         }
     }
 
-    override public init() {
+    public required init() {
         super.init()
     }
 

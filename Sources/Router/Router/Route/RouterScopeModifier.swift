@@ -5,8 +5,8 @@
 
 import SwiftUI
 
-private struct RouterScopeModifier: ViewModifier {
-    @State private var router = Router()
+private struct RouterScopeModifier<RouterType: AbstractRouter>: ViewModifier {
+    @State private var router = RouterType()
 
     func body(content: Content) -> some View {
         content.environment(router)
@@ -18,7 +18,7 @@ public extension View {
     /// Applies a Router scope to the view hierarchy by injecting a shared `Router`
     /// instance into the environment. Use this on a container view so all child views
     /// can access navigation via `@Environment(Router.self)`.
-    func routerScope() -> some View {
-        modifier(RouterScopeModifier())
+    func routerScope<RouterType: AbstractRouter>(type _: RouterType.Type = Router.self) -> some View {
+        modifier(RouterScopeModifier<RouterType>())
     }
 }

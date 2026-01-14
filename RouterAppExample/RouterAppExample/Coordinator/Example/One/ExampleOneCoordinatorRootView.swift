@@ -8,7 +8,8 @@ import SwiftUI
 
 struct ExampleOneCoordinatorRootView: View {
     var body: some View {
-        ExampleOneAppCoordinator().routerScope()
+        ExampleOneAppCoordinator()
+            .routerScope()
             .navigationTitle("Example one")
     }
 }

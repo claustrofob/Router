@@ -4,7 +4,7 @@
 //
 
 public final class Router: AbstractRouter {
-    override public init() {
+    public required init() {
         super.init()
     }
 }

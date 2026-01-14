@@ -14,7 +14,7 @@ import Foundation
     @ObservationIgnored
     private var registeredTypes: Set<String> = []
 
-    init() {}
+    required init() {}
 
     func register(_ type: (some Routable).Type) {
         registeredTypes.insert("\(type)")
