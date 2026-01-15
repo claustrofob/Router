@@ -93,6 +93,7 @@ Each presentation (sheet, fullscreen cover, or navigation destination) defines i
 Only the currently presented screen knows how to present the next one.
 
 Universal link routing is performed as follows:
+
 1. A single UniversalLinkRouter instance is created at the root view. It stores a queue of routes that represents the app hierarchy to be presented.
 2. Each presented view dequeues the next route from UniversalLinkRouter and presents the corresponding screen.
 3. This process repeats until the queue is empty.
@@ -106,7 +107,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             // new presentation context
-            RouterScopeView { router in
+            RouterScopeView { (router: Router) in
                 VStack {
                     Button("Push some screens") {
                         universalLinkRouter.route(to: [
@@ -120,7 +121,7 @@ struct ContentView: View {
                     presentationType: .navigationStack
                 ) { _ in
                     // new presentation context
-                    RouterScopeView { router in
+                    RouterScopeView { (router: Router) in
                         Text("First")
                             .route(
                                 SecondRoute.self,
@@ -128,7 +129,7 @@ struct ContentView: View {
                                 presentationType: .navigationStack
                             ) { _ in
                                 // new presentation context
-                                RouterScopeView { router in
+                                RouterScopeView { (router: Router) in
                                     Text("Second")
                                         .route(
                                             ThirdRoute.self,

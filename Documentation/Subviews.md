@@ -179,7 +179,7 @@ struct ContentView: View {
             ...
         }
         .route(SheetRoute1.self, in: router, presentationType: .sheet) { _ in
-            RouterScopeView { router in
+            RouterScopeView { (router: Router) in
                 VStack {
                     ...
                 }
@@ -193,4 +193,5 @@ struct ContentView: View {
 ```
 
 # Further reading
+
 - [Universal links](UniversalLinks.md)

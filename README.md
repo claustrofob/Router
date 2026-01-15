@@ -272,7 +272,7 @@ Manage tabs:
 
 ```swift
 struct ContentView: View {
-    @State private var router = Router()
+    @State private var router = TabRouter()
 
     var body: some View {
         RoutableTabView(router: router) { tab in
@@ -383,9 +383,7 @@ struct ContentView: View {
 }
 ```
 
-#### Example: Sharing Router Across Subviews
-
-Within a single page, subviews access the same router from the environment:
+Now within a single page, subviews access the same router from the environment:
 
 ```swift
 struct ProfileView: View {
