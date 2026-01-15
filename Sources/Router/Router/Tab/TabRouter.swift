@@ -21,9 +21,7 @@ public final class TabRouter: AbstractRouter {
         }
     }
 
-    public required init() {
-        super.init()
-    }
+    public required init() {}
 
     func register(_ route: some Routable) {
         guard routes[route.id] == nil else {
@@ -43,4 +41,11 @@ public final class TabRouter: AbstractRouter {
         routeIDs.removeAll()
         clearRegistrations()
     }
+
+    override public func show(_ item: some Routable) {
+        assertRegistration(item)
+        self.item = item
+    }
+
+    override public func dismiss() {}
 }
